@@ -1,0 +1,17 @@
+{
+    "name": "Maria App",
+    "short_name": "MariaApp",
+    "description": "Tu rutina de bienestar total",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#fdfcfb",
+    "theme_color": "#ffb5c2",
+    "icons": [
+        {
+            "src": "https://cdn-icons-png.flaticon.com/512/2964/2964514.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

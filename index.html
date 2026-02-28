@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Maria App - Rutina Diaria</title>
+
+    <!-- PWA & iOS Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Maria App">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2964/2964514.png">
+    <meta name="theme-color" content="#ffb5c2">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('SW registrado'))
+                    .catch(err => console.log('SW error', err));
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Maria App</h1>
+            <p style="color: var(--text-secondary);">Tu rutina de bienestar total</p>
+        </header>
+
+        <!-- Supplement Section -->
+        <section class="card" id="supplements">
+            <h2>💊 Mis Suplementos</h2>
+            <div id="supplement-list">
+                <!-- Items added dynamically -->
+            </div>
+            <button id="add-supp-btn" style="width: 100%; margin-top: 10px;">+ Agregar Suplemento</button>
+
+            <!-- Add Form (initially hidden) -->
+            <div id="add-form" class="hidden" style="margin-top: 20px;">
+                <div class="input-group">
+                    <input type="text" id="supp-name" placeholder="Nombre (ej. Magnesio)">
+                </div>
+                <div class="input-group">
+                    <input type="time" id="supp-time">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button id="save-supp" class="secondary" style="flex: 1;">Guardar</button>
+                    <button id="cancel-supp" style="flex: 1; background: #444;">Cancelar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workout Section -->
+        <section class="card" id="workout">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">🏋️ Mi Entrenamiento</h2>
+                <div id="progress-text" style="font-size: 0.9rem; font-weight: 700; color: var(--primary);">0%</div>
+            </div>
+
+            <div class="progress-container"
+                style="background: #eee; height: 10px; border-radius: 5px; margin-bottom: 20px; overflow: hidden;">
+                <div id="progress-bar"
+                    style="background: var(--primary); width: 0%; height: 100%; transition: width 0.3s ease;"></div>
+            </div>
+
+            <div class="tabs" id="workout-tabs">
+                <div class="tab active" data-day="0">Lun</div>
+                <div class="tab" data-day="1">Mar</div>
+                <div class="tab" data-day="2">Mié</div>
+                <div class="tab" data-day="3">Jue</div>
+                <div class="tab" data-day="4">Vie</div>
+            </div>
+            <div id="workout-content" class="workout-details">
+                <!-- Content added dynamically -->
+            </div>
+        </section>
+
+        <section class="card" id="notifications-status">
+            <p id="notif-msg" style="font-size: 0.8rem; text-align: center; color: var(--text-secondary);">
+                🔔 Habilitar alarmas.
+            </p>
+            <button id="enable-notif"
+                style="width: 100%; margin-top: 10px; background: var(--secondary); color: #4a4a4a;">Activar
+                Notificaciones</button>
+        </section>
+    </div>
+
+    <!-- AI Coach Floating Button -->
+    <div id="ai-coach-trigger"
+        style="position: fixed; bottom: 20px; right: 20px; background: var(--primary); width: 60px; height: 60px; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; box-shadow: var(--shadow); z-index: 100;">
+        🤖
+    </div>
+
+    <!-- AI Coach Chat Box -->
+    <div id="ai-chat" class="card hidden"
+        style="position: fixed; bottom: 90px; right: 20px; width: 300px; max-height: 400px; display: flex; flex-direction: column; z-index: 100;">
+        <h3 style="font-size: 1rem; margin-bottom: 10px;">Coach Maria AI 🌸</h3>
+        <div id="chat-history"
+            style="flex: 1; overflow-y: auto; font-size: 0.85rem; padding-bottom: 10px; min-height: 200px;">
+            <p style="background: var(--coach-bg); padding: 10px; border-radius: 12px; margin-bottom: 8px;">¡Hola! Soy
+                tu coach. ¿En qué máquina necesitas ayuda hoy?</p>
+        </div>
+        <div style="display: flex; gap: 5px;">
+            <input type="text" id="chat-input" placeholder="Pregunta algo..." style="font-size: 0.8rem; padding: 8px;">
+            <button id="send-chat" style="padding: 8px 15px;">Ir</button>
+        </div>
+    </div>
+
+    <!-- Exercise Modal -->
+    <div id="exercise-modal" class="hidden"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(5px);">
+        <div class="card" style="max-width: 90%; width: 400px; background: white;">
+            <h3 id="modal-title">Nombre Ejercicio</h3>
+            <div id="modal-img-container"
+                style="width: 100%; height: 200px; background: #eee; border-radius: 12px; margin: 15px 0; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                <img id="exercise-img" src="" alt="Cargando..." style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <p id="modal-desc" style="font-size: 0.9rem; color: var(--text-secondary);"></p>
+            <button id="close-modal" style="width: 100%; margin-top: 20px;">Cerrar</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
