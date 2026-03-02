@@ -1,13 +1,13 @@
 const exerciseImages = {
-    "Prensa de piernas": "./images/real_prensa_piernas_diagram.png",
-    "Jalón al pecho": "./images/real_jalon_pecho_diagram.png",
-    "Curl femoral": "./images/real_curl_femoral_diagram.png",
-    "Hip thrust": "./images/real_hip_thrust_diagram.png",
-    "Glúteo en máquina": "./images/real_gluteo_maquina_diagram.png",
-    "Extensión de piernas": "./images/real_extension_piernas_diagram.png",
-    "Abductores": "",
-    "Remo sentado": "",
-    "Bíceps en máquina": "",
+    "Prensa de piernas": "images/real_prensa_piernas_diagram.png",
+    "Jalón al pecho": "images/real_jalon_pecho_diagram.png",
+    "Curl femoral": "images/real_curl_femoral_diagram.png",
+    "Hip thrust": "images/real_hip_thrust_diagram.png",
+    "Glúteo en máquina": "images/real_gluteo_maquina_diagram.png",
+    "Extensión de piernas": "images/real_extension_piernas_diagram.png",
+    "Abductores": "images/adbuctores.webp",
+    "Remo sentado": "images/remo_sentado.jpg",
+    "Bíceps en máquina": "images/biceps en maquina.png",
     "Tríceps en polea": "",
     "Deltoide posterior": "",
     "Press de pecho": "",
@@ -352,10 +352,20 @@ function setupInterval() {
 
 function showNotification(name) {
     if (Notification.permission === "granted") {
-        new Notification("¡Hora de tus suplementos!", {
-            body: `Es momento de tomar: ${name}`,
-            icon: "https://cdn-icons-png.flaticon.com/512/3062/3062125.png"
-        });
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then(registration => {
+                registration.showNotification("¡Hora de tus suplementos!", {
+                    body: `Es momento de tomar: ${name}`,
+                    icon: "https://cdn-icons-png.flaticon.com/512/3062/3062125.png",
+                    badge: "https://cdn-icons-png.flaticon.com/512/3062/3062125.png"
+                });
+            });
+        } else {
+            new Notification("¡Hora de tus suplementos!", {
+                body: `Es momento de tomar: ${name}`,
+                icon: "https://cdn-icons-png.flaticon.com/512/3062/3062125.png"
+            });
+        }
     }
 }
 
