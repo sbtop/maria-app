@@ -1,373 +1,352 @@
-const exerciseImages = {
-    "Prensa de piernas": "images/real_prensa_piernas_diagram.png",
-    "Jalón al pecho": "images/real_jalon_pecho_diagram.png",
-    "Curl femoral": "images/real_curl_femoral_diagram.png",
-    "Hip thrust": "images/real_hip_thrust_diagram.png",
-    "Glúteo en máquina": "images/real_gluteo_maquina_diagram.png",
-    "Extensión de piernas": "images/real_extension_piernas_diagram.png",
-    "Abductores": "images/adbuctores.webp",
-    "Remo sentado": "images/remo_sentado.jpg",
-    "Bíceps en máquina": "images/biceps en maquina.png",
-    "Tríceps en polea": "",
-    "Deltoide posterior": "",
-    "Press de pecho": "",
-    "Press de hombros": "",
-    "Elevaciones laterales": "",
-    "Patada de glúteo": "",
-    "Prensa pies altos": ""
-};
+const app = {
+    cards: [],
 
-const modalDescriptions = {
-    "Prensa de piernas": "Coloca los pies a la anchura de los hombros. Baja la plataforma controladamente hasta que tus rodillas formen un ángulo de 90 grados y empuja con fuerza sin bloquear las rodillas.",
-    "Jalón al pecho": "Sujeta la barra más ancho que tus hombros. Lleva la barra hacia la parte superior del pecho contrayendo la espalda, evitando balanceos con el cuerpo.",
-    "Curl femoral": "Ajusta el rodillo sobre tus talones. Flexiona las piernas llevando los talones hacia el glúteo y vuelve a la posición inicial lentamente.",
-    "Hip thrust": "Apoya la parte alta de la espalda en el banco. Empuja la cadera hacia arriba con los talones hasta que tu cuerpo esté alineado, apretando fuerte el glúteo.",
-    "Glúteo en máquina": "Sujeta los agarres y mantén el core firme. Empuja la plataforma hacia atrás con el talón concentrando todo el esfuerzo en el glúteo.",
-    "Extensión de piernas": "Siéntate con la espalda bien apoyada. Extiende las piernas completamente y aprieta los cuádriceps un segundo antes de bajar con control.",
-    "Abductores": "Ajusta las almohadillas en la parte exterior de tus rodillas. Abre las piernas con fuerza hacia los lados y cierra suavemente.",
-    "Remo sentado": "Mantén la espalda recta y el pecho fuera. Tira del agarre hacia tu ombligo juntando las escápulas y estira los brazos sin perder la postura.",
-    "Bíceps en máquina": "Apoya los brazos en el cojín. Flexiona los codos llevando el agarre hacia tus hombros y baja sin estirar del todo para mantener la tensión.",
-    "Tríceps en polea": "Codos pegados a los costados. Extiende los brazos hacia abajo completamente apretando el tríceps y sube hasta que los antebrazos estén paralelos al suelo.",
-    "Deltoide posterior": "En la máquina de aperturas, siéntate de frente. Lleva los brazos hacia atrás con los codos ligeramente flexionados para trabajar la parte trasera del hombro.",
-    "Press de pecho": "Apoya bien la espalda. Empuja los agarres hacia adelante hasta extender los brazos y vuelve sintiendo el estiramiento en el pectoral.",
-    "Press de hombros": "Empuja los agarres verticalmente sobre tu cabeza. Baja hasta que tus manos estén a la altura de las orejas y repite.",
-    "Elevaciones laterales": "Con mancuernas o poleas, eleva los brazos hacia los lados hasta la altura de los hombros, manteniendo una ligera flexión en los codos.",
-    "Patada de glúteo": "En polea baja, sujeta el tobillo. Lleva la pierna hacia atrás estirada sin arquear la zona lumbar, focando en la contracción del glúteo.",
-    "Prensa pies altos": "Igual que la prensa normal pero con los pies en la parte superior de la plataforma para enfocar más el trabajo en glúteos e isquiotibiales."
-};
-
-const workouts = [
-    {
-        day: "Lunes",
-        focus: "Piernas & Glúteos",
-        exercises: [
-            { name: "Prensa de piernas", desc: "4 series x 12 reps", hasImg: true },
-            { name: "Curl femoral", desc: "3 series x 15 reps", hasImg: true },
-            { name: "Extensión de piernas", desc: "3 series x 15 reps", hasImg: true },
-            { name: "Abductores", desc: "4 series x 20 reps", hasImg: true },
-            { name: "Glúteo en máquina", desc: "3 series x 15 reps por pierna", hasImg: true },
-            { name: "Cardio", desc: "20 min Caminadora inclinada o elíptica" }
-        ]
+    init() {
+        this.loadData();
+        this.initTheme();
+        this.initUsername();
+        this.initNotifications();
+        this.renderCards();
+        this.updateDate();
+        this.setupNavigation();
+        this.updateNextPayment();
     },
-    {
-        day: "Martes",
-        focus: "Espalda & Brazos",
-        exercises: [
-            { name: "Jalón al pecho", desc: "4 series x 12 reps", hasImg: true },
-            { name: "Remo sentado", desc: "3 series x 12 reps", hasImg: true },
-            { name: "Bíceps en máquina", desc: "3 series x 15 reps", hasImg: true },
-            { name: "Tríceps en polea", desc: "3 series x 15 reps", hasImg: true },
-            { name: "Deltoide posterior", desc: "3 series x 15 reps", hasImg: true },
-            { name: "Cardio", desc: "20 min Bicicleta con intervalos" }
-        ]
+
+    initNotifications() {
+        if ("Notification" in window) {
+            if (Notification.permission === "granted") {
+                document.getElementById('noti-btn').classList.add('active');
+            }
+        } else {
+            document.getElementById('noti-btn').style.display = 'none';
+        }
     },
-    {
-        day: "Miércoles",
-        focus: "Cardio & Core",
-        exercises: [
-            { name: "Cardio continuo", desc: "30–40 min (bici, elíptica o caminadora)" },
-            { name: "Abdominal máquina", desc: "3 series x 15 reps" },
-            { name: "Crunch en fitball", desc: "3 series x 20 reps" },
-            { name: "Plancha", desc: "3 series de 30–45 seg" }
-        ]
+
+    requestNotifications() {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                document.getElementById('noti-btn').classList.add('active');
+                new Notification("sbtop pay", { body: "Notificaciones activadas satisfactoriamente." });
+            }
+        });
     },
-    {
-        day: "Jueves",
-        focus: "Glúteos & Femoral",
-        exercises: [
-            { name: "Hip thrust", desc: "4 series x 12 reps", hasImg: true },
-            { name: "Curl femoral", desc: "4 series x 15 reps", hasImg: true },
-            { name: "Abductores", desc: "4 series x 20 reps", hasImg: true },
-            { name: "Prensa pies altos", desc: "3 series x 12 reps", hasImg: true },
-            { name: "Patada de glúteo", desc: "3 series x 15 reps", hasImg: true },
-            { name: "Cardio", desc: "15–20 min Stairmaster o caminadora" }
-        ]
-    },
-    {
-        day: "Viernes",
-        focus: "Pecho, Hombros & Brazos",
-        exercises: [
-            { name: "Press de pecho", desc: "4 series x 12 reps", hasImg: true },
-            { name: "Press de hombros", desc: "3 series x 12 reps", hasImg: true },
-            { name: "Elevaciones laterales", desc: "3 series x 15 reps", hasImg: true },
-            { name: "Biceps/Triceps Superserie", desc: "3 series x 15 reps" },
-            { name: "Cardio Final", desc: "20 min libre" }
-        ]
-    }
-];
 
-// App State
-let supplements = JSON.parse(localStorage.getItem('maria-supps')) || [];
-let completedExercises = JSON.parse(localStorage.getItem('maria-completed')) || {}; // { "Lunes": { "Prensa...": true } }
-let currentDayIndex = 0;
+    getDaysRemaining(dueDay, paidUntil) {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = now.getMonth();
+        const d = now.getDate();
 
-// DOM Elements
-const suppList = document.getElementById('supplement-list');
-const addBtn = document.getElementById('add-supp-btn');
-const addForm = document.getElementById('add-form');
-const saveSupp = document.getElementById('save-supp');
-const cancelSupp = document.getElementById('cancel-supp');
-const suppNameInput = document.getElementById('supp-name');
-const suppTimeInput = document.getElementById('supp-time');
-const workoutContent = document.getElementById('workout-content');
-const workoutTabs = document.querySelectorAll('.tab');
-const enableNotifBtn = document.getElementById('enable-notif');
-const notifMsg = document.getElementById('notif-msg');
-const progressBar = document.getElementById('progress-bar');
-const progressText = document.getElementById('progress-text');
+        const today = new Date(y, m, d);
+        let target = new Date(y, m, dueDay);
 
-// AI Coach & Modal Elements
-const aiTrigger = document.getElementById('ai-coach-trigger');
-const aiChat = document.getElementById('ai-chat');
-const chatHistory = document.getElementById('chat-history');
-const chatInput = document.getElementById('chat-input');
-const sendChat = document.getElementById('send-chat');
+        const currentCycle = `${y}-${String(m + 1).padStart(2, '0')}`;
 
-const exModal = document.getElementById('exercise-modal');
-const modalTitle = document.getElementById('modal-title');
-const exerciseImg = document.getElementById('exercise-img');
-const modalDesc = document.getElementById('modal-desc');
-const closeModal = document.getElementById('close-modal');
+        // If the due day is smaller than today OR this cycle is already paid
+        if (dueDay < d || (paidUntil && paidUntil >= currentCycle)) {
+            target = new Date(y, m + 1, dueDay);
 
-// Initialization
-function init() {
-    renderSupplements();
-    renderWorkout(0);
-    checkNotificationPermission();
-    setupInterval();
-}
-
-// Supplement Logic (Same as before but with pastel style in CSS)
-function renderSupplements() {
-    suppList.innerHTML = supplements.length === 0 ?
-        '<p style="text-align: center; color: #666; font-size: 0.9rem;">No hay suplementos programados.</p>' : '';
-
-    supplements.sort((a, b) => a.time.localeCompare(b.time)).forEach((supp, index) => {
-        const div = document.createElement('div');
-        div.className = 'list-item';
-        div.innerHTML = `
-            <div>
-                <strong>${supp.name}</strong>
-                <div style="font-size: 0.8rem; color: var(--text-secondary);">Diario</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <span class="time">${supp.time}</span>
-                <span style="cursor: pointer; color: #ffb5c2;" onclick="deleteSupp(${index})">✕</span>
-            </div>
-        `;
-        suppList.appendChild(div);
-    });
-}
-
-window.deleteSupp = (index) => {
-    supplements.splice(index, 1);
-    saveAndRender();
-};
-
-function saveAndRender() {
-    localStorage.setItem('maria-supps', JSON.stringify(supplements));
-    renderSupplements();
-}
-
-addBtn.onclick = () => {
-    addForm.classList.remove('hidden');
-    addBtn.classList.add('hidden');
-};
-
-cancelSupp.onclick = () => {
-    addForm.classList.add('hidden');
-    addBtn.classList.remove('hidden');
-};
-
-saveSupp.onclick = () => {
-    const name = suppNameInput.value.trim();
-    const time = suppTimeInput.value;
-    if (name && time) {
-        supplements.push({ name, time });
-        saveAndRender();
-        addForm.classList.add('hidden');
-        addBtn.classList.remove('hidden');
-        suppNameInput.value = '';
-        suppTimeInput.value = '';
-    }
-};
-
-// Workout Logic
-function renderWorkout(dayIndex) {
-    currentDayIndex = dayIndex;
-    const workout = workouts[dayIndex];
-    if (!completedExercises[workout.day]) completedExercises[workout.day] = {};
-
-    workoutContent.innerHTML = `
-        <h3 style="color: var(--text-primary); margin-bottom: 5px;">${workout.focus}</h3>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">${workout.day}</p>
-        ${workout.exercises.map((ex, idx) => {
-        const isDone = completedExercises[workout.day][ex.name] || false;
-        return `
-            <div class="exercise-item ${isDone ? 'completed' : ''}" style="display: flex; align-items: flex-start; gap: 15px; border-left: none; padding-left: 0;">
-                <div class="checkbox ${isDone ? 'checked' : ''}" onclick="toggleExercise('${workout.day}', '${ex.name}')"></div>
-                <div style="flex: 1; cursor: ${ex.hasImg ? 'pointer' : 'default'}" onclick="${ex.hasImg ? `openExercise('${ex.name}')` : ''}">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h4 style="margin: 0;">${ex.name}</h4>
-                        ${ex.hasImg ? '<span style="font-size: 0.75rem; color: var(--primary);">Ver Foto 📸</span>' : ''}
-                    </div>
-                    <p style="margin-top: 5px;">${ex.desc}</p>
-                </div>
-            </div>
-            `;
-    }).join('')}
-    `;
-    updateProgress(workout.day);
-}
-
-window.toggleExercise = (day, exName) => {
-    completedExercises[day][exName] = !completedExercises[day][exName];
-    localStorage.setItem('maria-completed', JSON.stringify(completedExercises));
-    renderWorkout(currentDayIndex);
-};
-
-function updateProgress(day) {
-    const workout = workouts[currentDayIndex];
-    const total = workout.exercises.length;
-    const done = Object.values(completedExercises[day]).filter(Boolean).length;
-    const percent = Math.round((done / total) * 100);
-
-    progressBar.style.width = `${percent}%`;
-    progressText.innerText = `${percent}%`;
-}
-
-window.openExercise = (name) => {
-    const imgPath = exerciseImages[name];
-    if (imgPath) {
-        modalTitle.innerText = name;
-        exerciseImg.src = imgPath;
-        modalDesc.innerText = modalDescriptions[name] || "Sigue este diagrama detallado para ver la máquina y la postura correcta. ¡Tú puedes!";
-        exModal.classList.remove('hidden');
-    }
-};
-
-closeModal.onclick = () => exModal.classList.add('hidden');
-
-workoutTabs.forEach(tab => {
-    tab.onclick = () => {
-        workoutTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        renderWorkout(parseInt(tab.dataset.day));
-    };
-});
-
-// AI Coach Logic (Enfoque en entrenamiento femenino)
-const coachAdvice = {
-    "prensa": "Para enfocar más en glúteos en la prensa, coloca los pies un poco más arriba en la plataforma. No bloquees nunca las rodillas y mantén el control. ¡Tus piernas se verán increíbles!",
-    "jalon": "En el jalón, enfócate en llevar los codos hacia tus costillas. Esto te ayudará a definir la espalda sin ensancharla demasiado, dándote esa forma estética que buscamos.",
-    "hip thrust": "¡El rey de los ejercicios de glúteo! Empuja con los talones y mantén la contracción 2 segundos arriba. Imagina que quieres romper la barra con la cadera.",
-    "gluteo": "En la patada de glúteo, mantén el core bien firme para no arquear la espalda. Concentra todo el esfuerzo en el glúteo mayor. ¡Sentirás el trabajo!",
-    "abductores": "Este es clave para la forma lateral del glúteo. Abre con explosividad y cierra muy lento para maximizar la tonificación.",
-    "curl femoral": "Mantén las caderas pegadas al banco. Imagina que quieres tocar tus glúteos con los talones. Es vital para unos femorales definidos.",
-    "extension": "Ajusta la máquina para que el peso no baile. Extiende y aprieta el cuádriceps arriba. Ideal para dar forma a la parte delantera de la pierna.",
-    "remo": "Mantén el pecho orgulloso y la espalda recta. Tira hacia tu ombligo para trabajar la zona media de la espalda y mejorar tu postura.",
-    "biceps": "Controla el movimiento. No balancees los hombros. Unos brazos tonificados lucen genial con cualquier outfit veraniego.",
-    "triceps": "Focaliza en la parte posterior del brazo para evitar la flacidez. Baja con fuerza y siente el estiramiento.",
-    "abdominal": "Calidad sobre cantidad. Siente cómo se contrae el abdomen en cada repetición. Mantén el cuello relajado.",
-    "pecho": "Un press suave ayuda a mantener la firmeza de la zona pectoral. No subas demasiado peso, busca la sensación del músculo.",
-    "hombros": "Unos hombros redondeados dan una percha espectacular. Usa un peso que te permita hacer el movimiento completo y elegante.",
-    "cardio": "El cardio es tu aliado para la quema de grasa. ¡Mantén el ritmo, Maria! Estás haciendo un trabajo espectacular por tu salud."
-};
-
-aiTrigger.onclick = () => aiChat.classList.toggle('hidden');
-
-sendChat.onclick = () => {
-    // AI Coach Logic Improvement (Normalización de texto)
-    const normalize = (text) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-    const qNorm = normalize(chatInput.value.trim());
-    if (!qNorm) return;
-
-    // Add User Message
-    addChatMessage('Tu', chatInput.value, 'white');
-    chatInput.value = '';
-
-    // Simple Bot Logic
-    setTimeout(() => {
-        let response = "¡Buena pregunta! Sobre eso te recomiendo mantener siempre buena postura y controlar el movimiento. ¿Alguna máquina en especial te genera dudas?";
-
-        // Find specific advice
-        for (const key in coachAdvice) {
-            const keyNorm = normalize(key);
-            if (qNorm.includes(keyNorm)) {
-                response = coachAdvice[key];
-                break;
+            // If even next month is paid, we might need to jump further (though usually 1 jump is enough for this app's scope)
+            const nextCycle = `${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2, '0')}`;
+            if (paidUntil && paidUntil >= nextCycle) {
+                target = new Date(target.getFullYear(), target.getMonth() + 1, dueDay);
             }
         }
 
-        addChatMessage('Coach', response, 'var(--coach-bg)');
-    }, 600);
-};
+        const diffTime = target.getTime() - today.getTime();
+        return Math.round(diffTime / (1000 * 60 * 60 * 24));
+    },
 
-function addChatMessage(sender, msg, bg) {
-    const p = document.createElement('p');
-    p.style.cssText = `background: ${bg}; padding: 10px; border-radius: 12px; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);`;
-    p.innerHTML = `<strong>${sender}:</strong> ${msg}`;
-    chatHistory.appendChild(p);
-    chatHistory.scrollTop = chatHistory.scrollHeight;
-}
+    initUsername() {
+        const savedName = localStorage.getItem('fintech_flow_user') || 'Usuario';
+        document.getElementById('user-name-text').textContent = `Hola, ${savedName}`;
+    },
 
-// Notifications Logic
-function checkNotificationPermission() {
-    if (!("Notification" in window)) {
-        notifMsg.innerText = "Este navegador no soporta notificaciones.";
-        enableNotifBtn.classList.add('hidden');
-        return;
-    }
+    editUsername() {
+        const currentName = localStorage.getItem('fintech_flow_user') || 'Usuario';
+        const newName = prompt('¿Cómo te llamas?', currentName);
 
-    if (Notification.permission === "granted") {
-        enableNotifBtn.classList.add('hidden');
-        notifMsg.innerText = "✅ Las alarmas están activas.";
-    }
-}
-
-enableNotifBtn.onclick = () => {
-    Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-            checkNotificationPermission();
+        if (newName && newName.trim()) {
+            localStorage.setItem('fintech_flow_user', newName.trim());
+            this.initUsername();
         }
-    });
-};
+    },
 
-function setupInterval() {
-    setInterval(() => {
-        const now = new Date();
-        const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    initTheme() {
+        const savedTheme = localStorage.getItem('fintech_flow_theme') || 'blue';
+        this.applyTheme(savedTheme);
 
-        // This runs every minute (approx) to check for alarms
-        if (now.getSeconds() === 0) {
-            supplements.forEach(supp => {
-                if (supp.time === currentTime) {
-                    showNotification(supp.name);
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.getAttribute('data-theme');
+                this.applyTheme(theme);
+            });
+        });
+    },
+
+    applyTheme(theme) {
+        // Remove old theme classes
+        document.body.classList.remove('theme-blue', 'theme-emerald', 'theme-amethyst', 'theme-gold');
+        if (theme !== 'blue') {
+            document.body.classList.add(`theme-${theme}`);
+        }
+
+        // Update UI
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
+        });
+
+        localStorage.setItem('fintech_flow_theme', theme);
+    },
+
+    loadData() {
+        const saved = localStorage.getItem('fintech_flow_cards');
+        if (saved) {
+            this.cards = JSON.parse(saved);
+        }
+    },
+
+    saveData() {
+        localStorage.setItem('fintech_flow_cards', JSON.stringify(this.cards));
+    },
+
+    exportData() {
+        const data = {
+            cards: this.cards,
+            theme: localStorage.getItem('fintech_flow_theme'),
+            user: localStorage.getItem('fintech_flow_user')
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `sbtop_pay_backup_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+    },
+
+    importData(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.cards) {
+                    this.cards = data.cards;
+                    this.saveData();
+                    if (data.theme) this.applyTheme(data.theme);
+                    if (data.user) {
+                        localStorage.setItem('fintech_flow_user', data.user);
+                        this.initUsername();
+                    }
+                    this.renderCards();
+                    this.updateNextPayment();
+                    alert('¡Datos restaurados con éxito!');
                 }
-            });
-        }
-    }, 1000);
-}
+            } catch (err) {
+                alert('Error al leer el archivo. Asegúrate de que sea un archivo de sbtop pay válido.');
+            }
+        };
+        reader.readAsText(file);
+    },
 
-function showNotification(name) {
-    if (Notification.permission === "granted") {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.ready.then(registration => {
-                registration.showNotification("¡Hora de tus suplementos!", {
-                    body: `Es momento de tomar: ${name}`,
-                    icon: "https://cdn-icons-png.flaticon.com/512/3062/3062125.png",
-                    badge: "https://cdn-icons-png.flaticon.com/512/3062/3062125.png"
-                });
+    updateDate() {
+        const now = new Date();
+        const options = { weekday: 'long', day: 'numeric', month: 'long' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('es-ES', options);
+    },
+
+    setupNavigation() {
+        document.querySelectorAll('nav li').forEach(li => {
+            li.addEventListener('click', () => {
+                const viewId = li.getAttribute('data-view');
+                this.switchView(viewId);
+
+                document.querySelectorAll('nav li').forEach(item => item.classList.remove('active'));
+                li.classList.add('active');
             });
+        });
+    },
+
+    switchView(viewId) {
+        console.log('Switching to view:', viewId);
+        document.querySelectorAll('.view').forEach(view => {
+            view.classList.remove('active');
+            view.style.display = 'none';
+        });
+
+        const targetView = document.getElementById(`${viewId}-view`);
+        if (targetView) {
+            targetView.classList.add('active');
+            targetView.style.display = 'block';
+            console.log('View activated:', viewId);
         } else {
-            new Notification("¡Hora de tus suplementos!", {
-                body: `Es momento de tomar: ${name}`,
-                icon: "https://cdn-icons-png.flaticon.com/512/3062/3062125.png"
-            });
+            console.error('View not found:', `${viewId}-view`);
         }
-    }
-}
+    },
 
-// Init App
-init();
+    showModal(id) {
+        document.getElementById(id).style.display = 'flex';
+    },
+
+    hideModal(id) {
+        document.getElementById(id).style.display = 'none';
+    },
+
+    saveCard() {
+        const name = document.getElementById('card-name').value;
+        const cut = parseInt(document.getElementById('card-cut').value);
+        const due = parseInt(document.getElementById('card-due').value);
+        const amount = parseFloat(document.getElementById('card-amount').value) || 0;
+
+        if (!name || isNaN(cut) || isNaN(due)) {
+            alert('Por favor completa los campos principales');
+            return;
+        }
+
+        const newCard = {
+            id: Date.now(),
+            name,
+            cutDay: cut,
+            dueDay: due,
+            amount
+        };
+
+        this.cards.push(newCard);
+        this.saveData();
+        this.renderCards();
+        this.updateNextPayment();
+        this.hideModal('card-modal');
+
+        // Clear inputs
+        document.getElementById('card-name').value = '';
+        document.getElementById('card-cut').value = '';
+        document.getElementById('card-due').value = '';
+        document.getElementById('card-amount').value = '';
+    },
+
+    renderCards() {
+        const briefList = document.getElementById('cards-list-brief');
+        const fullList = document.getElementById('cards-list-full');
+
+        const html = this.cards.length === 0
+            ? '<div class="empty-state"><p>No tienes tarjetas registradas aún.</p></div>'
+            : this.cards.map(card => {
+                const daysLeft = this.getDaysRemaining(card.dueDay, card.paidUntil);
+                let urgencyClass = '';
+                let urgencyLabel = '';
+
+                if (daysLeft === 0) {
+                    urgencyClass = 'urgent';
+                    urgencyLabel = '¡PAGA HOY!';
+                } else if (daysLeft < 3) {
+                    urgencyClass = 'warning';
+                    urgencyLabel = 'PAGO PRÓXIMO';
+                }
+
+                return `
+                <div class="glass finance-card ${urgencyClass}">
+                    ${urgencyLabel ? `<div class="urgency-badge">${urgencyLabel}</div>` : ''}
+                    <div class="card-item-title">${card.name}</div>
+                    <div class="card-item-row">
+                        <span>Estado</span>
+                        <span style="color: ${daysLeft < 3 ? 'var(--danger)' : 'var(--accent)'}">${daysLeft === 0 ? 'Vence hoy' : `Faltan ${daysLeft} días`}</span>
+                    </div>
+                    <div class="card-item-row">
+                        <span>Límite de Pago</span>
+                        <span>Día ${card.dueDay}</span>
+                    </div>
+                    <div class="card-item-row">
+                        <span>Monto a Pagar</span>
+                        <span>$${card.amount.toLocaleString('es-MX')}</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-primary" style="flex: 1" onclick="app.markAsPaid(${card.id})">Marcar Pagado</button>
+                        <button class="btn-secondary" onclick="app.deleteCard(${card.id})" title="Eliminar">
+                            <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+
+        if (briefList) briefList.innerHTML = html;
+        if (fullList) fullList.innerHTML = html;
+    },
+
+    deleteCard(id) {
+        if (!confirm('¿Estás seguro de eliminar esta tarjeta?')) return;
+        this.cards = this.cards.filter(c => c.id !== id);
+        this.saveData();
+        this.renderCards();
+        this.updateNextPayment();
+    },
+
+    markAsPaid(id) {
+        const now = new Date();
+        const currentCycle = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+        const card = this.cards.find(c => c.id === id);
+        if (card) {
+            card.paidUntil = currentCycle;
+            this.saveData();
+            this.renderCards();
+            this.updateNextPayment();
+            alert(`Pago registrado para ${card.name}. Próximo recordatorio actualizado.`);
+        }
+    },
+
+    updateNextPayment() {
+        if (this.cards.length === 0) {
+            document.getElementById('next-payment-val').textContent = '--';
+            document.getElementById('next-payment-date').textContent = 'No hay pagos pendientes';
+            return;
+        }
+
+        // Sort by actual remaining days instead of just the day number
+        const sorted = [...this.cards].sort((a, b) => {
+            return this.getDaysRemaining(a.dueDay, a.paidUntil) - this.getDaysRemaining(b.dueDay, b.paidUntil);
+        });
+
+        const next = sorted[0];
+        const daysLeft = this.getDaysRemaining(next.dueDay, next.paidUntil);
+        const statusText = daysLeft === 0 ? '¡Vence hoy!' : `Faltan ${daysLeft} días`;
+
+        document.getElementById('next-payment-val').textContent = `$${next.amount.toLocaleString('es-MX')}`;
+        document.getElementById('next-payment-date').textContent = `${next.name} - ${statusText}`;
+    },
+
+    runAnalysis() {
+        const amount = parseFloat(document.getElementById('finance-amount').value);
+        if (isNaN(amount)) {
+            alert('Ingresa un monto válido');
+            return;
+        }
+
+        const aName = document.getElementById('opt-a-name').value || 'A';
+        const aRate = parseFloat(document.getElementById('opt-a-rate').value) || 0;
+        const aFee = parseFloat(document.getElementById('opt-a-fee').value) || 0;
+
+        const bName = document.getElementById('opt-b-name').value || 'B';
+        const bRate = parseFloat(document.getElementById('opt-b-rate').value) || 0;
+        const bFee = parseFloat(document.getElementById('opt-b-fee').value) || 0;
+
+        const totalA = (amount * (aRate / 100)) + aFee;
+        const totalB = (amount * (bRate / 100)) + bFee;
+
+        const results = document.getElementById('analysis-results');
+        results.classList.remove('hidden');
+
+        const winner = totalA < totalB ? aName : bName;
+        const savings = Math.abs(totalA - totalB);
+
+        results.innerHTML = `
+            <div class="winner">La mejor opción es: ${winner}</div>
+            <p>Costo Anual estimado (${aName}): $${totalA.toLocaleString('es-MX')}</p>
+            <p>Costo Anual estimado (${bName}): $${totalB.toLocaleString('es-MX')}</p>
+            <div style="margin-top: 1rem; font-weight: 600">Ahorro proyectado: $${savings.toLocaleString('es-MX')}</div>
+        `;
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => app.init());
