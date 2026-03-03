@@ -54,8 +54,12 @@
                             <option value="Mancuerna">Solo Mancuernas</option>
                         </select>
                     </div>
-                    <button onclick="generateAIWorkout()"
-                        style="width: 100%; font-size: 0.85rem; padding: 10px;">Generar Rutina de Hoy</button>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="generateAIWorkout()"
+                            style="flex: 2; font-size: 0.85rem; padding: 10px;">Generar Rutina ✨</button>
+                        <button onclick="restoreOriginalWorkout()"
+                            style="flex: 1; font-size: 0.85rem; padding: 10px; background: #eee; color: #666; border: 1px solid #ccc;">Restablecer</button>
+                    </div>
                 </section>
 
                 <section class="card" id="workout">

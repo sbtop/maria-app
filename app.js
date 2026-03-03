@@ -107,6 +107,9 @@ const workouts = [
     }
 ];
 
+// Backup of original workouts to allow "Restablecer"
+const originalWorkouts = JSON.parse(JSON.stringify(workouts));
+
 // App State
 // App State with EXTREME Error Resilience
 let supplements = [];
@@ -234,7 +237,15 @@ window.generateAIWorkout = () => {
     };
 
     renderWorkout(currentDayIndex);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     alert("¡Rutina generada con IA! 🌸");
+};
+
+window.restoreOriginalWorkout = () => {
+    workouts[currentDayIndex] = JSON.parse(JSON.stringify(originalWorkouts[currentDayIndex]));
+    renderWorkout(currentDayIndex);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    alert("Rutina original restaurada. ✨");
 };
 
 // Supplement Logic (Same as before but with pastel style in CSS)
@@ -363,13 +374,25 @@ function updateProgress(day) {
 }
 
 window.openExercise = (name) => {
+    const exData = window.exerciseDatabase.find(ex => ex.name === name);
     const imgPath = exerciseImages[name];
+
+    modalTitle.innerText = name;
     if (imgPath) {
-        modalTitle.innerText = name;
         exerciseImg.src = imgPath;
-        modalDesc.innerText = modalDescriptions[name] || "Sigue este diagrama detallado para ver la máquina y la postura correcta. ¡Tú puedes!";
-        exModal.classList.remove('hidden');
+        exerciseImg.classList.remove('hidden');
+    } else {
+        exerciseImg.classList.add('hidden');
     }
+
+    let description = modalDescriptions[name] || "Sigue este diagrama detallado para ver la postura correcta.";
+    if (exData && exData.instructions) {
+        const dumbbellTip = exData.equip === "Mancuerna" ? "\n\n💡 TIP MANCUERNA: Controla el peso y no uses impulso." : "";
+        description = `Instrucciones:\n${exData.instructions}${dumbbellTip}`;
+    }
+
+    modalDesc.innerText = description;
+    exModal.classList.remove('hidden');
 };
 
 closeModal.onclick = () => exModal.classList.add('hidden');
@@ -393,13 +416,13 @@ function renderLibrary(filter = '') {
     ).forEach(ex => {
         const div = document.createElement('div');
         div.className = 'list-item';
-        div.style.background = 'white';
+        div.style.cssText = "background: white; display: flex; justify-content: space-between; align-items: center; padding: 12px; margin-bottom: 8px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);";
         div.innerHTML = `
-            <div>
-                <strong>${ex.name}</strong>
+            <div style="flex: 1;">
+                <strong style="display: block; font-size: 0.95rem;">${ex.name}</strong>
                 <div style="font-size: 0.75rem; color: var(--text-secondary);">${ex.muscle} • ${ex.equip}</div>
             </div>
-            ${ex.hasImg ? `<button onclick="openExercise('${ex.name}')" style="padding: 5px 10px; font-size: 0.7rem;">Ver</button>` : ''}
+            <button onclick="openExercise('${ex.name}')" style="padding: 6px 12px; font-size: 0.75rem; background: var(--secondary); color: #333; margin-left: 10px; flex-shrink: 0;">Ver</button>
         `;
         libContent.appendChild(div);
     });
