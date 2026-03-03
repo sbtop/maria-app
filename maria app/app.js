@@ -1,3 +1,14 @@
+// Global Error Handler - MOVED TO TOP to catch everything
+window.onerror = function (msg, url, line) {
+    const errorDiv = document.createElement('div');
+    errorDiv.style.cssText = "position:fixed; top:0; left:0; width:100%; background:rgba(255,0,0,0.9); color:white; font-size:12px; z-index:9999; padding:10px; text-align:center;";
+    errorDiv.innerText = "⚠️ ERROR: " + msg + " (Línea: " + line + ")";
+    if (document.body) document.body.appendChild(errorDiv);
+    return false;
+};
+
+console.log("Maria App v5 Loading...");
+
 const exerciseImages = {
     "Prensa de piernas": "images/real_prensa_piernas_diagram.png",
     "Jalón al pecho": "images/real_jalon_pecho_diagram.png",
@@ -97,10 +108,30 @@ const workouts = [
 ];
 
 // App State
-let supplements = JSON.parse(localStorage.getItem('maria-supps')) || [];
-let completedExercises = JSON.parse(localStorage.getItem('maria-completed')) || {}; // { "Lunes": { "Prensa...": true } }
+// App State with EXTREME Error Resilience
+let supplements = [];
+let completedExercises = {};
 let currentDayIndex = 0;
-let lastCheckTime = localStorage.getItem('maria-last-check') || null;
+let lastCheckTime = null;
+
+function loadState() {
+    try {
+        const s = localStorage.getItem('maria-supps');
+        if (s) supplements = JSON.parse(s);
+        if (!Array.isArray(supplements)) supplements = [];
+
+        const c = localStorage.getItem('maria-completed');
+        if (c) completedExercises = JSON.parse(c);
+        if (!completedExercises || typeof completedExercises !== 'object') completedExercises = {};
+
+        lastCheckTime = localStorage.getItem('maria-last-check');
+    } catch (e) {
+        console.error("Error crítico en loadState:", e);
+        supplements = [];
+        completedExercises = {};
+    }
+}
+loadState();
 
 // DOM Elements
 const suppList = document.getElementById('supplement-list');
@@ -400,6 +431,19 @@ window.testNotification = () => {
     showNotification("Prueba de Maria App 🌸");
 };
 
+// Nuclear Reset Function
+window.nuclearReset = () => {
+    if (confirm("¿Quieres borrar todos los datos y reiniciar la app? Esto borrará tus suplementos y progreso.")) {
+        localStorage.clear();
+        if ('serviceWorker' in navigator) {
+            caches.keys().then(names => {
+                for (let name of names) caches.delete(name);
+            });
+        }
+        location.reload();
+    }
+};
+
 function showNotification(name) {
     if (Notification.permission === "granted") {
         if ('serviceWorker' in navigator) {
@@ -420,4 +464,10 @@ function showNotification(name) {
 }
 
 // Init App
-init();
+try {
+    init();
+    console.log("App iniciada correctamente.");
+} catch (e) {
+    console.error("Fallo fatal en init():", e);
+    // window.onerror will catch this and show the red box
+}

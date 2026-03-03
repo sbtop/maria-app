@@ -86,12 +86,17 @@
             <p id="notif-msg" style="font-size: 0.8rem; text-align: center; color: var(--text-secondary);">
                 🔔 Habilitar alarmas.
             </p>
-            <button id="enable-notif"
-                style="width: 100%; margin-top: 10px; background: var(--secondary); color: #4a4a4a;">Activar
-                Notificaciones</button>
-            <button id="test-notif" onclick="testNotification()"
-                style="width: 100%; margin-top: 5px; background: transparent; color: var(--text-secondary); border: 1px dashed var(--text-secondary); font-size: 0.8rem;">🔔
-                Probar Campana (Test)</button>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <button id="enable-notif"
+                    style="width: 100%; margin-top: 10px; background: var(--secondary); color: #4a4a4a;">Activar
+                    Notificaciones</button>
+                <button id="test-notif" onclick="testNotification()"
+                    style="width: 100%; margin-top: 5px; background: transparent; color: var(--text-secondary); border: 1px dashed var(--text-secondary); font-size: 0.8rem;">🔔
+                    Probar Campana (Test)</button>
+                <button onclick="nuclearReset()"
+                    style="width: 100%; margin-top: 20px; background: #ff4d4d; color: white; font-size: 0.75rem;">☢️
+                    Restaurar App (Borrar todo)</button>
+            </div>
         </section>
     </div>
 
