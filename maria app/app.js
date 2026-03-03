@@ -111,6 +111,7 @@ const workouts = [
 // App State with EXTREME Error Resilience
 let supplements = [];
 let completedExercises = {};
+let exerciseLogs = {}; // { date: { exName: { weight: 0, reps: 0 } } }
 let currentDayIndex = 0;
 let lastCheckTime = null;
 
@@ -118,20 +119,30 @@ function loadState() {
     try {
         const s = localStorage.getItem('maria-supps');
         if (s) supplements = JSON.parse(s);
-        if (!Array.isArray(supplements)) supplements = [];
 
         const c = localStorage.getItem('maria-completed');
         if (c) completedExercises = JSON.parse(c);
-        if (!completedExercises || typeof completedExercises !== 'object') completedExercises = {};
+
+        const l = localStorage.getItem('maria-logs');
+        if (l) exerciseLogs = JSON.parse(l);
 
         lastCheckTime = localStorage.getItem('maria-last-check');
     } catch (e) {
         console.error("Error crítico en loadState:", e);
-        supplements = [];
-        completedExercises = {};
     }
 }
 loadState();
+
+// DOM Elements
+const mainContent = document.getElementById('main-content');
+const viewTitle = document.getElementById('view-title');
+const navItems = document.querySelectorAll('.nav-item');
+const viewSections = document.querySelectorAll('.view-section');
+
+const libContent = document.getElementById('library-content');
+const libSearch = document.getElementById('library-search');
+
+const weeklyVolumeEl = document.getElementById('weekly-volume');
 
 // DOM Elements
 const suppList = document.getElementById('supplement-list');
@@ -163,12 +174,68 @@ const closeModal = document.getElementById('close-modal');
 
 // Initialization
 function init() {
+    setupNav();
     renderSupplements();
     renderWorkout(0);
+    renderLibrary();
+    updateStats();
     checkNotificationPermission();
     setupInterval();
     checkMissedAlarms();
 }
+
+// Navigation Logic
+function setupNav() {
+    navItems.forEach(item => {
+        item.onclick = () => {
+            const view = item.dataset.view;
+            navItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+
+            viewSections.forEach(sec => sec.classList.add('hidden'));
+            const target = document.getElementById(`view-${view}`);
+            if (target) target.classList.remove('hidden');
+
+            viewTitle.innerText = item.querySelector('span').innerText;
+            if (view === 'stats') updateStats();
+            if (view === 'library') renderLibrary();
+        };
+    });
+}
+
+window.generateAIWorkout = () => {
+    const focus = document.getElementById('ai-focus').value;
+    const equip = document.getElementById('ai-equip').value;
+
+    // Simple AI Selection Logic
+    const pool = window.exerciseDatabase.filter(ex =>
+        (ex.category === focus || focus === 'Full Body') &&
+        (ex.equip === equip || ex.equip === 'Máquina' || equip === 'Máquina')
+    );
+
+    // Pick 5-6 exercises
+    const selected = pool.sort(() => 0.5 - Math.random()).slice(0, 6);
+
+    if (selected.length === 0) {
+        alert("No encontré suficientes ejercicios para ese filtro. Prueba con 'Gimnasio'.");
+        return;
+    }
+
+    // Replace the current day's workout with this dynamic one
+    const todayName = workouts[currentDayIndex].day;
+    workouts[currentDayIndex] = {
+        day: todayName,
+        focus: `IA: ${focus} (${equip})`,
+        exercises: selected.map(ex => ({
+            name: ex.name,
+            desc: "Sugerido por IA - 3 x 12",
+            hasImg: ex.hasImg
+        }))
+    };
+
+    renderWorkout(currentDayIndex);
+    alert("¡Rutina generada con IA! 🌸");
+};
 
 // Supplement Logic (Same as before but with pastel style in CSS)
 function renderSupplements() {
@@ -235,16 +302,31 @@ function renderWorkout(dayIndex) {
         <h3 style="color: var(--text-primary); margin-bottom: 5px;">${workout.focus}</h3>
         <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">${workout.day}</p>
         ${workout.exercises.map((ex, idx) => {
-        const isDone = completedExercises[workout.day][ex.name] || false;
+        const isDone = (completedExercises[workout.day] && completedExercises[workout.day][ex.name]) || false;
+        const log = (exerciseLogs[workout.day] && exerciseLogs[workout.day][ex.name]) || { weight: '', reps: '' };
+
         return `
-            <div class="exercise-item ${isDone ? 'completed' : ''}" style="display: flex; align-items: flex-start; gap: 15px; border-left: none; padding-left: 0;">
-                <div class="checkbox ${isDone ? 'checked' : ''}" onclick="toggleExercise('${workout.day}', '${ex.name}')"></div>
-                <div style="flex: 1; cursor: ${ex.hasImg ? 'pointer' : 'default'}" onclick="${ex.hasImg ? `openExercise('${ex.name}')` : ''}">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h4 style="margin: 0;">${ex.name}</h4>
-                        ${ex.hasImg ? '<span style="font-size: 0.75rem; color: var(--primary);">Ver Foto 📸</span>' : ''}
+            <div class="exercise-item ${isDone ? 'completed' : ''}" style="display: flex; flex-direction: column; gap: 10px; border-left: 3px solid var(--secondary); padding-left: 15px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                    <div class="checkbox ${isDone ? 'checked' : ''}" onclick="toggleExercise('${workout.day}', '${ex.name}')"></div>
+                    <div style="flex: 1; cursor: ${ex.hasImg ? 'pointer' : 'default'}" onclick="${ex.hasImg ? `openExercise('${ex.name}')` : ''}">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h4 style="margin: 0; font-size: 0.95rem;">${ex.name}</h4>
+                            ${ex.hasImg ? '<span style="font-size: 0.7rem; color: var(--primary);">Foto 📸</span>' : ''}
+                        </div>
+                        <p style="margin-top: 2px; font-size: 0.8rem;">${ex.desc}</p>
                     </div>
-                    <p style="margin-top: 5px;">${ex.desc}</p>
+                </div>
+                
+                <div class="log-inputs">
+                    <div>
+                        <div class="label">Peso (kg)</div>
+                        <input type="number" id="log-w-${idx}" value="${log.weight}" placeholder="0" onchange="saveLog('${workout.day}', '${ex.name}', ${idx})">
+                    </div>
+                    <div>
+                        <div class="label">Reps</div>
+                        <input type="number" id="log-r-${idx}" value="${log.reps}" placeholder="0" onchange="saveLog('${workout.day}', '${ex.name}', ${idx})">
+                    </div>
                 </div>
             </div>
             `;
@@ -252,6 +334,17 @@ function renderWorkout(dayIndex) {
     `;
     updateProgress(workout.day);
 }
+
+window.saveLog = (day, exName, idx) => {
+    const weight = document.getElementById(`log-w-${idx}`).value;
+    const reps = document.getElementById(`log-r-${idx}`).value;
+
+    if (!exerciseLogs[day]) exerciseLogs[day] = {};
+    exerciseLogs[day][exName] = { weight, reps };
+
+    localStorage.setItem('maria-logs', JSON.stringify(exerciseLogs));
+    updateStats();
+};
 
 window.toggleExercise = (day, exName) => {
     completedExercises[day][exName] = !completedExercises[day][exName];
@@ -288,6 +381,43 @@ workoutTabs.forEach(tab => {
         renderWorkout(parseInt(tab.dataset.day));
     };
 });
+
+// Library & Stats Logic
+function renderLibrary(filter = '') {
+    const normalizedFilter = filter.toLowerCase();
+    libContent.innerHTML = '';
+
+    window.exerciseDatabase.filter(ex =>
+        ex.name.toLowerCase().includes(normalizedFilter) ||
+        ex.muscle.toLowerCase().includes(normalizedFilter)
+    ).forEach(ex => {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.style.background = 'white';
+        div.innerHTML = `
+            <div>
+                <strong>${ex.name}</strong>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">${ex.muscle} • ${ex.equip}</div>
+            </div>
+            ${ex.hasImg ? `<button onclick="openExercise('${ex.name}')" style="padding: 5px 10px; font-size: 0.7rem;">Ver</button>` : ''}
+        `;
+        libContent.appendChild(div);
+    });
+}
+
+libSearch.oninput = (e) => renderLibrary(e.target.value);
+
+function updateStats() {
+    let totalVolume = 0;
+    Object.values(exerciseLogs).forEach(dayLogs => {
+        Object.values(dayLogs).forEach(log => {
+            if (log.weight && log.reps) {
+                totalVolume += parseFloat(log.weight) * parseInt(log.reps);
+            }
+        });
+    });
+    weeklyVolumeEl.innerText = totalVolume.toLocaleString();
+}
 
 // AI Coach Logic (Enfoque en entrenamiento femenino)
 const coachAdvice = {

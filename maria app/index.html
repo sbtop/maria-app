@@ -31,58 +31,107 @@
     <div class="app-container">
         <header>
             <h1>Maria App</h1>
-            <p style="color: var(--text-secondary);">Tu rutina de bienestar total</p>
+            <p id="view-title" style="color: var(--text-secondary);">Hoy</p>
         </header>
 
-        <!-- Supplement Section -->
-        <section class="card" id="supplements">
-            <h2>💊 Mis Suplementos</h2>
-            <div id="supplement-list">
-                <!-- Items added dynamically -->
-            </div>
-            <button id="add-supp-btn" style="width: 100%; margin-top: 10px;">+ Agregar Suplemento</button>
+        <!-- Main Views -->
+        <main id="main-content">
+            <!-- Today View -->
+            <div id="view-today" class="view-section">
+                <!-- AI Generator Trigger -->
+                <section class="card"
+                    style="margin-bottom: 15px; background: linear-gradient(135deg, #fff 0%, var(--coach-bg) 100%);">
+                    <h3 style="font-size: 0.9rem; margin-bottom: 10px;">✨ Generador IA Professional</h3>
+                    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                        <select id="ai-focus" style="flex: 1; font-size: 0.8rem; padding: 8px; border-radius: 8px;">
+                            <option value="Glúteo">Enfoque Glúteo 🍑</option>
+                            <option value="Pierna">Pierna Completa 🦵</option>
+                            <option value="Espalda">Espalda & Estética 🦋</option>
+                            <option value="Full Body">Full Body ✨</option>
+                        </select>
+                        <select id="ai-equip" style="flex: 1; font-size: 0.8rem; padding: 8px; border-radius: 8px;">
+                            <option value="Máquina">Gimnasio</option>
+                            <option value="Mancuerna">Solo Mancuernas</option>
+                        </select>
+                    </div>
+                    <button onclick="generateAIWorkout()"
+                        style="width: 100%; font-size: 0.85rem; padding: 10px;">Generar Rutina de Hoy</button>
+                </section>
 
-            <!-- Add Form (initially hidden) -->
-            <div id="add-form" class="hidden" style="margin-top: 20px;">
-                <div class="input-group">
-                    <input type="text" id="supp-name" placeholder="Nombre (ej. Magnesio)">
-                </div>
-                <div class="input-group">
-                    <input type="time" id="supp-time">
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <button id="save-supp" class="secondary" style="flex: 1;">Guardar</button>
-                    <button id="cancel-supp" style="flex: 1; background: #444;">Cancelar</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Workout Section -->
-        <section class="card" id="workout">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="margin: 0;">🏋️ Mi Entrenamiento</h2>
-                <div id="progress-text" style="font-size: 0.9rem; font-weight: 700; color: var(--primary);">0%</div>
-            </div>
-
-            <div class="progress-container"
-                style="background: #eee; height: 10px; border-radius: 5px; margin-bottom: 20px; overflow: hidden;">
-                <div id="progress-bar"
-                    style="background: var(--primary); width: 0%; height: 100%; transition: width 0.3s ease;"></div>
+                <section class="card" id="workout">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="margin: 0;">🏋️ Mi Entrenamiento</h2>
+                        <div id="progress-text" style="font-size: 0.9rem; font-weight: 700; color: var(--primary);">0%
+                        </div>
+                    </div>
+                    <div class="progress-container"
+                        style="background: #eee; height: 8px; border-radius: 4px; margin-bottom: 20px; overflow: hidden;">
+                        <div id="progress-bar"
+                            style="background: var(--primary); width: 0%; height: 100%; transition: width 0.3s ease;">
+                        </div>
+                    </div>
+                    <div class="tabs" id="workout-tabs">
+                        <div class="tab active" data-day="0">Lun</div>
+                        <div class="tab" data-day="1">Mar</div>
+                        <div class="tab" data-day="2">Mié</div>
+                        <div class="tab" data-day="3">Jue</div>
+                        <div class="tab" data-day="4">Vie</div>
+                    </div>
+                    <div id="workout-content" class="workout-details"></div>
+                </section>
             </div>
 
-            <div class="tabs" id="workout-tabs">
-                <div class="tab active" data-day="0">Lun</div>
-                <div class="tab" data-day="1">Mar</div>
-                <div class="tab" data-day="2">Mié</div>
-                <div class="tab" data-day="3">Jue</div>
-                <div class="tab" data-day="4">Vie</div>
+            <!-- Library View -->
+            <div id="view-library" class="view-section hidden">
+                <section class="card">
+                    <h2>📚 Biblioteca</h2>
+                    <input type="text" id="library-search" placeholder="Buscar ejercicio..."
+                        style="margin-bottom: 15px;">
+                    <div id="library-content" style="display: grid; gap: 10px;"></div>
+                </section>
             </div>
-            <div id="workout-content" class="workout-details">
-                <!-- Content added dynamically -->
-            </div>
-        </section>
 
-        <section class="card" id="notifications-status">
+            <!-- Stats View -->
+            <div id="view-stats" class="view-section hidden">
+                <section class="card">
+                    <h2>📊 Estadísticas</h2>
+                    <div id="stats-summary" style="margin-bottom: 20px;">
+                        <div class="stat-pill">Carga Total Semanal: <span id="weekly-volume">0</span> kg</div>
+                    </div>
+                    <div id="stats-charts">
+                        <p style="text-align:center; color: #999;">Gráficos de progreso próximamente...</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Supplements View -->
+            <div id="view-supps" class="view-section hidden">
+                <section class="card" id="supplements">
+                    <h2>💊 Mis Suplementos</h2>
+                    <div id="supplement-list"></div>
+                    <button id="add-supp-btn" style="width: 100%; margin-top: 10px;">+ Agregar</button>
+                    <div id="add-form" class="hidden" style="margin-top: 20px;">
+                        <input type="text" id="supp-name" placeholder="Nombre">
+                        <input type="time" id="supp-time" style="margin: 10px 0;">
+                        <div style="display: flex; gap: 10px;">
+                            <button id="save-supp" class="secondary" style="flex: 1;">Guardar</button>
+                            <button id="cancel-supp" style="flex: 1; background: #444;">Cancelar</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Sticky Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-view="today">🏠<span>Hoy</span></div>
+            <div class="nav-item" data-view="library">📚<span>Biblio</span></div>
+            <div class="nav-item" data-view="stats">📊<span>Stats</span></div>
+            <div class="nav-item" data-view="supps">💊<span>Supps</span></div>
+        </nav>
+
+        <section class="card" id="notifications-status" style="margin-bottom: 80px;">
             <p id="notif-msg" style="font-size: 0.8rem; text-align: center; color: var(--text-secondary);">
                 🔔 Habilitar alarmas.
             </p>
@@ -135,6 +184,7 @@
         </div>
     </div>
 
+    <script src="exercises.js"></script>
     <script src="app.js"></script>
 </body>
 
