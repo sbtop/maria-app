@@ -41,7 +41,9 @@
                 <!-- AI Generator Trigger -->
                 <section class="card"
                     style="margin-bottom: 15px; background: linear-gradient(135deg, #fff 0%, var(--coach-bg) 100%);">
-                    <h3 style="font-size: 0.9rem; margin-bottom: 10px;">✨ Generador IA Professional</h3>
+                    <h3 style="font-size: 0.9rem; margin-bottom: 10px; display: flex; align-items: center; gap: 5px;"><i
+                            data-icon="sparkles" style="width: 16px; height: 16px;"></i> Generador IA Professional
+                    </h3>
                     <div style="display: flex; gap: 8px; margin-bottom: 10px;">
                         <select id="ai-focus" style="flex: 1; font-size: 0.8rem; padding: 8px; border-radius: 8px;">
                             <option value="Quema Grasa (4 Semanas)">🔥 Quema Grasa (4 Semanas)</option>
@@ -57,7 +59,8 @@
                     </div>
                     <div style="display: flex; gap: 8px;">
                         <button onclick="generateAIWorkout()"
-                            style="flex: 2; font-size: 0.85rem; padding: 10px;">Generar Rutina ✨</button>
+                            style="flex: 2; font-size: 0.85rem; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 5px;"><i
+                                data-icon="zap" style="width: 16px; height: 16px;"></i> Generar Rutina</button>
                         <button onclick="restoreOriginalWorkout()"
                             style="flex: 1; font-size: 0.85rem; padding: 10px; background: #eee; color: #666; border: 1px solid #ccc;">Restablecer</button>
                     </div>
@@ -66,7 +69,8 @@
                 <section class="card" id="workout">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="margin: 0;">🏋️ Mi Entrenamiento</h2>
+                        <h2 style="margin: 0; display: flex; align-items: center; gap: 8px;"><i
+                                data-icon="dumbbell"></i> Mi Entrenamiento</h2>
                         <div id="progress-text" style="font-size: 0.9rem; font-weight: 700; color: var(--primary);">0%
                         </div>
                     </div>
@@ -90,7 +94,8 @@
             <!-- Library View -->
             <div id="view-library" class="view-section hidden">
                 <section class="card">
-                    <h2>📚 Biblioteca</h2>
+                    <h2 style="display: flex; align-items: center; gap: 8px;"><i data-icon="book-open"></i> Biblioteca
+                    </h2>
                     <input type="text" id="library-search" placeholder="Buscar ejercicio..."
                         style="margin-bottom: 15px;">
                     <div id="library-content" style="display: grid; gap: 10px;"></div>
@@ -102,7 +107,8 @@
                 <section class="card" style="margin-bottom: 15px;">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h2 style="margin: 0;">⚖️ Control de Peso</h2>
+                        <h2 style="margin: 0; display: flex; align-items: center; gap: 8px;"><i data-icon="scale"></i>
+                            Control de Peso</h2>
                         <select id="weight-unit-select" onchange="changeWeightUnit()"
                             style="padding: 5px 10px; border-radius: 8px; font-size: 0.8rem; background: #eee; border: 1px solid #ccc;">
                             <option value="kg">KG</option>
@@ -127,12 +133,14 @@
                         style="background: rgba(var(--primary-rgb), 0.1); padding: 15px; border-radius: 12px; text-align: center;">
                         <div style="font-size: 0.85rem; color: var(--text-secondary);">Progreso Total:</div>
                         <div id="weight-diff" style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">0.0
-                            <span class="unit-label">kg</span></div>
+                            <span class="unit-label">kg</span>
+                        </div>
                     </div>
                 </section>
 
                 <section class="card">
-                    <h2>📊 Volumen de Entrenamiento</h2>
+                    <h2 style="display: flex; align-items: center; gap: 8px;"><i data-icon="bar-chart-2"></i> Volumen
+                        de Entrenamiento</h2>
                     <div id="stats-summary" style="margin-bottom: 20px;">
                         <div class="stat-pill">Carga Total Semanal: <span id="weekly-volume">0</span> <span
                                 class="unit-label">kg</span></div>
@@ -143,15 +151,22 @@
             <!-- Supplements View -->
             <div id="view-supps" class="view-section hidden">
                 <section class="card" id="supplements">
-                    <h2>💊 Mis Suplementos</h2>
+                    <h2 style="display: flex; align-items: center; gap: 8px;"><i data-icon="pill"></i> Mis Suplementos
+                    </h2>
                     <div id="supplement-list"></div>
-                    <button id="add-supp-btn" style="width: 100%; margin-top: 10px;">+ Agregar</button>
+                    <button id="add-supp-btn"
+                        style="width: 100%; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 5px;"><i
+                            data-icon="plus" style="width: 16px; height: 16px;"></i> Agregar</button>
                     <div id="add-form" class="hidden" style="margin-top: 20px;">
                         <input type="text" id="supp-name" placeholder="Nombre">
                         <input type="time" id="supp-time" style="margin: 10px 0;">
                         <div style="display: flex; gap: 10px;">
-                            <button id="save-supp" class="secondary" style="flex: 1;">Guardar</button>
-                            <button id="cancel-supp" style="flex: 1; background: #444;">Cancelar</button>
+                            <button id="save-supp" class="secondary"
+                                style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;"><i
+                                    data-icon="save" style="width: 16px; height: 16px;"></i> Guardar</button>
+                            <button id="cancel-supp"
+                                style="flex: 1; background: #444; display: flex; align-items: center; justify-content: center; gap: 5px;"><i
+                                    data-icon="x" style="width: 16px; height: 16px;"></i> Cancelar</button>
                         </div>
                     </div>
                 </section>
@@ -160,40 +175,42 @@
 
         <!-- Sticky Bottom Navigation -->
         <nav class="bottom-nav">
-            <div class="nav-item active" data-view="today">🏠<span>Hoy</span></div>
-            <div class="nav-item" data-view="library">📚<span>Biblio</span></div>
-            <div class="nav-item" data-view="stats">📊<span>Stats</span></div>
-            <div class="nav-item" data-view="supps">💊<span>Supps</span></div>
+            <div class="nav-item active" data-view="today"><i data-icon="home"></i><span>Hoy</span></div>
+            <div class="nav-item" data-view="library"><i data-icon="book-open"></i><span>Biblio</span></div>
+            <div class="nav-item" data-view="stats"><i data-icon="bar-chart-2"></i><span>Stats</span></div>
+            <div class="nav-item" data-view="supps"><i data-icon="pill"></i><span>Supps</span></div>
         </nav>
 
         <section class="card" id="notifications-status" style="margin-bottom: 80px;">
-            <p id="notif-msg" style="font-size: 0.8rem; text-align: center; color: var(--text-secondary);">
-                🔔 Habilitar alarmas.
+            <p id="notif-msg"
+                style="font-size: 0.8rem; text-align: center; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <i data-icon="bell" style="width: 14px; height: 14px;"></i> Habilitar alarmas.
             </p>
             <div style="display: flex; flex-direction: column; gap: 5px;">
                 <button id="enable-notif"
-                    style="width: 100%; margin-top: 10px; background: var(--secondary); color: #4a4a4a;">Activar
-                    Notificaciones</button>
+                    style="width: 100%; margin-top: 10px; background: var(--secondary); color: #4a4a4a; display: flex; align-items: center; justify-content: center; gap: 5px;"><i
+                        data-icon="bell-plus" style="width: 16px; height: 16px;"></i> Activar Notificaciones</button>
                 <button id="test-notif" onclick="testNotification()"
-                    style="width: 100%; margin-top: 5px; background: transparent; color: var(--text-secondary); border: 1px dashed var(--text-secondary); font-size: 0.8rem;">🔔
-                    Probar Campana (Test)</button>
+                    style="width: 100%; margin-top: 5px; background: transparent; color: var(--text-secondary); border: 1px dashed var(--text-secondary); font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 5px;"><i
+                        data-icon="bell-ring" style="width: 14px; height: 14px;"></i> Probar Campana (Test)</button>
                 <button onclick="nuclearReset()"
-                    style="width: 100%; margin-top: 20px; background: #ff4d4d; color: white; font-size: 0.75rem;">☢️
-                    Restaurar App (Borrar todo)</button>
+                    style="width: 100%; margin-top: 20px; background: #ff4d4d; color: white; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 5px;"><i
+                        data-icon="alert-triangle" style="width: 14px; height: 14px;"></i> Restaurar App (Borrar
+                    todo)</button>
             </div>
         </section>
     </div>
 
-    <!-- AI Coach Floating Button -->
     <div id="ai-coach-trigger"
-        style="position: fixed; bottom: 20px; right: 20px; background: var(--primary); width: 60px; height: 60px; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; box-shadow: var(--shadow); z-index: 100;">
-        🤖
+        style="position: fixed; bottom: 20px; right: 20px; background: var(--primary); color: white; width: 60px; height: 60px; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 107, 129, 0.4); z-index: 100;">
+        <i data-icon="bot" style="width: 28px; height: 28px;"></i>
     </div>
 
     <!-- AI Coach Chat Box -->
     <div id="ai-chat" class="card hidden"
-        style="position: fixed; bottom: 90px; right: 20px; width: 300px; max-height: 400px; display: flex; flex-direction: column; z-index: 100;">
-        <h3 style="font-size: 1rem; margin-bottom: 10px;">Coach Maria AI 🌸</h3>
+        style="position: fixed; bottom: 90px; right: 20px; width: 300px; max-height: 400px; display: flex; flex-direction: column; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+        <h3 style="font-size: 1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;"><i
+                data-icon="bot" style="width: 20px; height: 20px;"></i> Coach Maria AI</h3>
         <div id="chat-history"
             style="flex: 1; overflow-y: auto; font-size: 0.85rem; padding-bottom: 10px; min-height: 200px;">
             <p style="background: var(--coach-bg); padding: 10px; border-radius: 12px; margin-bottom: 8px;">¡Hola! Soy
@@ -219,7 +236,8 @@
         </div>
     </div>
 
-    <script src="exercises.js"></script>
+    <!-- Script Lucide Icons -->
+        <script src="exercises.js"></script>
     <script src="app.js"></script>
 </body>
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'maria-app-v10';
+const CACHE_NAME = 'maria-app-v12';
 const ASSETS = [
     './',
     './index.html',

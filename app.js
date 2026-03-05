@@ -47,6 +47,35 @@ const modalDescriptions = {
     "Prensa pies altos": "Igual que la prensa normal pero con los pies en la parte superior de la plataforma para enfocar más el trabajo en glúteos e isquiotibiales."
 };
 
+// High-Quality Custom Colorful Vector Icons Database
+const Icons = {
+    sparkles: `<svg viewBox="0 0 24 24" width="20" height="20"><defs><linearGradient id="spk" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFD700"/><stop offset="100%" stop-color="#FF8C00"/></linearGradient></defs><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="url(#spk)"/></svg>`,
+    zap: `<svg viewBox="0 0 24 24" width="18" height="18"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#FBBF24" stroke="#F59E0B" stroke-width="1"/></svg>`,
+    dumbbell: `<svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="8" width="4" height="8" rx="1" fill="#1E293B"/><rect x="6" y="10" width="2" height="4" fill="#475569"/><rect x="8" y="11" width="8" height="2" fill="#94A3B8"/><rect x="16" y="10" width="2" height="4" fill="#475569"/><rect x="18" y="8" width="4" height="8" rx="1" fill="#1E293B"/></svg>`,
+    "book-open": `<svg viewBox="0 0 24 24" width="22" height="22"><rect x="4" y="4" width="16" height="18" rx="2" fill="#3B82F6"/><path d="M4 8h16M4 12h16M4 16h16" stroke="#fff" stroke-width="1.5" opacity="0.4"/><rect x="8" y="4" width="8" height="20" fill="#fff" opacity="0.2"/></svg>`,
+    scale: `<svg viewBox="0 0 24 24" width="22" height="22"><rect x="3" y="4" width="18" height="16" rx="4" fill="#0EA5E9"/><rect x="5" y="6" width="14" height="12" rx="2" fill="#E0F2FE"/><circle cx="12" cy="12" r="4" fill="#BAE6FD"/><path d="M12 12l2-2" stroke="#0284C7" stroke-width="2" stroke-linecap="round"/></svg>`,
+    "bar-chart-2": `<svg viewBox="0 0 24 24" width="22" height="22"><rect x="4" y="14" width="4" height="6" rx="1" fill="#F43F5E"/><rect x="10" y="10" width="4" height="10" rx="1" fill="#FBBF24"/><rect x="16" y="4" width="4" height="16" rx="1" fill="#10B981"/><path d="M2 20h20" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+    pill: `<svg viewBox="0 0 24 24" width="22" height="22"><path d="M2.5 12.5a7 7 0 019.9-9.9l9.1 9.1a7 7 0 01-9.9 9.9l-9.1-9.1z" fill="#F472B6"/><path d="M12.4 2.6l9 9a7 7 0 01-9.9 9.9l-9-9z" fill="#60A5FA"/><path d="M6 6L12 12" stroke="#fff" stroke-width="2.5"/></svg>`,
+    plus: `<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#3B82F6"/><path d="M12 7v10M7 12h10" stroke="#FFF" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+    save: `<svg viewBox="0 0 24 24" width="18" height="18"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" fill="#10B981"/></svg>`,
+    x: `<svg viewBox="0 0 24 24" width="18" height="18"><path d="M19 6.4L17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4z" fill="#F43F5E"/></svg>`,
+    home: `<svg viewBox="0 0 24 24" width="24" height="24"><path d="M3 10l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V10z" fill="#E2E8F0"/><path d="M2.5 11l9.5-7.5L21.5 11" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><rect x="10" y="14" width="4" height="8" fill="#FBBF24" rx="1"/></svg>`,
+    bell: `<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="#FBBF24"/></svg>`,
+    "bell-plus": `<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="#10B981"/></svg>`,
+    "bell-ring": `<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="#3B82F6"/></svg>`,
+    "alert-triangle": `<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6zm-1 8h2v2h-2v-2zm0-6h2v4h-2v-4z" fill="#EF4444"/></svg>`,
+    bot: `<svg viewBox="0 0 24 24" width="28" height="28"><rect x="4" y="8" width="16" height="12" rx="4" fill="#F472B6"/><circle cx="8" cy="13" r="1.5" fill="#FFF"/><circle cx="16" cy="13" r="1.5" fill="#FFF"/><path d="M10 17h4" stroke="#FFF" stroke-width="2" stroke-linecap="round"/><path d="M12 8V4" stroke="#BE123C" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="3" r="2" fill="#E11D48"/></svg>`,
+    eye: `<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5c-1.7-4.4-6-7.5-11-7.5zM12 17c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z" fill="#3B82F6"/></svg>`,
+    camera: `<svg viewBox="0 0 24 24" width="14" height="14"><rect x="3" y="6" width="18" height="14" rx="2" fill="#8B5CF6"/><circle cx="12" cy="13" r="4" fill="#FBCFE8"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2" fill="#6D28D9"/></svg>`
+};
+
+function replaceIcons() {
+    document.querySelectorAll('i[data-icon]').forEach(el => {
+        const iconName = el.getAttribute('data-icon');
+        if (Icons[iconName]) el.innerHTML = Icons[iconName];
+    });
+}
+
 const workouts = [
     {
         day: "Lunes",
@@ -196,6 +225,7 @@ function init() {
     checkNotificationPermission();
     setupInterval();
     checkMissedAlarms();
+    replaceIcons();
 }
 
 // Navigation Logic
@@ -300,6 +330,7 @@ function renderSupplements() {
         `;
         suppList.appendChild(div);
     });
+    replaceIcons();
 }
 
 window.deleteSupp = (index) => {
@@ -355,7 +386,7 @@ function renderWorkout(dayIndex) {
                     <div style="flex: 1; cursor: ${ex.hasImg ? 'pointer' : 'default'}" onclick="${ex.hasImg ? `openExercise('${ex.name}')` : ''}">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <h4 style="margin: 0; font-size: 0.95rem;">${ex.name}</h4>
-                            ${ex.hasImg ? '<span style="font-size: 0.7rem; color: var(--primary);">Foto 📸</span>' : ''}
+                            ${ex.hasImg ? '<span style="font-size: 0.7rem; color: var(--primary); display: flex; align-items: center; gap: 4px;"><i data-icon="camera" style="width: 12px; height: 12px;"></i> Foto</span>' : ''}
                         </div>
                         <p style="margin-top: 2px; font-size: 0.8rem;">${ex.desc}</p>
                     </div>
@@ -376,6 +407,7 @@ function renderWorkout(dayIndex) {
     }).join('')}
     `;
     updateProgress(workout.day);
+    replaceIcons();
 }
 
 window.saveLog = (day, exName, idx) => {
@@ -454,10 +486,11 @@ function renderLibrary(filter = '') {
                 <strong style="display: block; font-size: 0.95rem;">${ex.name}</strong>
                 <div style="font-size: 0.75rem; color: var(--text-secondary);">${ex.muscle} • ${ex.equip}</div>
             </div>
-            <button onclick="openExercise('${ex.name}')" style="padding: 6px 12px; font-size: 0.75rem; background: var(--secondary); color: #333; margin-left: 10px; flex-shrink: 0;">Ver</button>
+            <button onclick="openExercise('${ex.name}')" style="padding: 6px 12px; font-size: 0.75rem; background: var(--secondary); color: #333; margin-left: 10px; flex-shrink: 0; display: flex; align-items: center; gap: 5px;"><i data-icon="eye" style="width: 14px; height: 14px;"></i> Ver</button>
         `;
         libContent.appendChild(div);
     });
+    replaceIcons();
 }
 
 libSearch.oninput = (e) => renderLibrary(e.target.value);
