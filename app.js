@@ -115,6 +115,8 @@ const originalWorkouts = JSON.parse(JSON.stringify(workouts));
 let supplements = [];
 let completedExercises = {};
 let exerciseLogs = {}; // { date: { exName: { weight: 0, reps: 0 } } }
+let weightTracker = { initial: '', current: '' };
+let currentWeightUnit = 'kg';
 let currentDayIndex = 0;
 let lastCheckTime = null;
 
@@ -128,6 +130,12 @@ function loadState() {
 
         const l = localStorage.getItem('maria-logs');
         if (l) exerciseLogs = JSON.parse(l);
+
+        const w = localStorage.getItem('maria-weights');
+        if (w) weightTracker = JSON.parse(w);
+
+        const u = localStorage.getItem('maria-weight-unit');
+        if (u) currentWeightUnit = u;
 
         lastCheckTime = localStorage.getItem('maria-last-check');
     } catch (e) {
@@ -177,6 +185,9 @@ const closeModal = document.getElementById('close-modal');
 
 // Initialization
 function init() {
+    document.getElementById('weight-unit-select').value = currentWeightUnit;
+    updateUnitLabels();
+
     setupNav();
     renderSupplements();
     renderWorkout(0);
@@ -210,11 +221,27 @@ window.generateAIWorkout = () => {
     const focus = document.getElementById('ai-focus').value;
     const equip = document.getElementById('ai-equip').value;
 
-    // Simple AI Selection Logic
-    const pool = window.exerciseDatabase.filter(ex =>
-        (ex.category === focus || focus === 'Full Body') &&
-        (ex.equip === equip || ex.equip === 'Máquina' || equip === 'Máquina')
-    );
+    let pool;
+    let focusName;
+    let instructionDesc;
+
+    if (focus === 'Quema Grasa (4 Semanas)') {
+        // Fat loss: Cardio, Full Body, Core, Legs. High reps/Intensity.
+        pool = window.exerciseDatabase.filter(ex =>
+            (ex.category === 'Cardio' || ex.category === 'Abdomen' || ex.category === 'Pierna' || ex.category === 'Glúteo') &&
+            (ex.equip === equip || ex.equip === 'Máquina' || equip === 'Máquina' || ex.equip === 'Peso corporal')
+        );
+        focusName = `Plan Quema Grasa - Día ${currentDayIndex + 1} (${equip})`;
+        instructionDesc = "Circuito 🔥 4 x 15-20 reps (Poco descanso)";
+    } else {
+        // Standard muscle group selections
+        pool = window.exerciseDatabase.filter(ex =>
+            (ex.category === focus || focus === 'Full Body') &&
+            (ex.equip === equip || ex.equip === 'Máquina' || equip === 'Máquina')
+        );
+        focusName = `IA: ${focus} (${equip})`;
+        instructionDesc = "Sugerido por IA - 3 x 12";
+    }
 
     // Pick 5-6 exercises
     const selected = pool.sort(() => 0.5 - Math.random()).slice(0, 6);
@@ -228,17 +255,22 @@ window.generateAIWorkout = () => {
     const todayName = workouts[currentDayIndex].day;
     workouts[currentDayIndex] = {
         day: todayName,
-        focus: `IA: ${focus} (${equip})`,
+        focus: focusName,
         exercises: selected.map(ex => ({
             name: ex.name,
-            desc: "Sugerido por IA - 3 x 12",
+            desc: instructionDesc,
             hasImg: ex.hasImg
         }))
     };
 
     renderWorkout(currentDayIndex);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    alert("¡Rutina generada con IA! 🌸");
+
+    if (focus === 'Quema Grasa (4 Semanas)') {
+        alert("¡Circuito Quema Grasa generado! 🔥 Dalo todo.");
+    } else {
+        alert("¡Rutina generada con IA! 🌸");
+    }
 };
 
 window.restoreOriginalWorkout = () => {
@@ -331,7 +363,7 @@ function renderWorkout(dayIndex) {
                 
                 <div class="log-inputs">
                     <div>
-                        <div class="label">Peso (kg)</div>
+                        <div class="label">Peso (<span class="unit-label">${currentWeightUnit}</span>)</div>
                         <input type="number" id="log-w-${idx}" value="${log.weight}" placeholder="0" onchange="saveLog('${workout.day}', '${ex.name}', ${idx})">
                     </div>
                     <div>
@@ -430,7 +462,42 @@ function renderLibrary(filter = '') {
 
 libSearch.oninput = (e) => renderLibrary(e.target.value);
 
+window.changeWeightUnit = () => {
+    currentWeightUnit = document.getElementById('weight-unit-select').value;
+    localStorage.setItem('maria-weight-unit', currentWeightUnit);
+    updateUnitLabels();
+    updateStats();
+    renderWorkout(currentDayIndex);
+};
+
+function updateUnitLabels() {
+    document.querySelectorAll('.unit-label').forEach(el => el.innerText = currentWeightUnit);
+}
+
+window.saveWeight = () => {
+    const initial = document.getElementById('weight-initial').value;
+    const current = document.getElementById('weight-current').value;
+    weightTracker = { initial, current };
+    localStorage.setItem('maria-weights', JSON.stringify(weightTracker));
+    updateStats();
+};
+
 function updateStats() {
+    // Weight Logic update
+    document.getElementById('weight-initial').value = weightTracker.initial || '';
+    document.getElementById('weight-current').value = weightTracker.current || '';
+
+    if (weightTracker.initial && weightTracker.current) {
+        const diff = parseFloat(weightTracker.current) - parseFloat(weightTracker.initial);
+        const isLoss = diff < 0;
+        let diffText = diff > 0 ? `+${diff.toFixed(1)} <span class="unit-label">${currentWeightUnit}</span>` : `${diff.toFixed(1)} <span class="unit-label">${currentWeightUnit}</span>`;
+        let color = isLoss ? '#4CAF50' : (diff > 0 ? '#f44336' : 'var(--text-secondary)');
+        document.getElementById('weight-diff').innerHTML = `<span style="color: ${color}">${diffText}</span>`;
+    } else {
+        document.getElementById('weight-diff').innerHTML = `0.0 <span class="unit-label">${currentWeightUnit}</span>`;
+    }
+
+    // Volume Logic
     let totalVolume = 0;
     Object.values(exerciseLogs).forEach(dayLogs => {
         Object.values(dayLogs).forEach(log => {

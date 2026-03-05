@@ -44,6 +44,7 @@
                     <h3 style="font-size: 0.9rem; margin-bottom: 10px;">✨ Generador IA Professional</h3>
                     <div style="display: flex; gap: 8px; margin-bottom: 10px;">
                         <select id="ai-focus" style="flex: 1; font-size: 0.8rem; padding: 8px; border-radius: 8px;">
+                            <option value="Quema Grasa (4 Semanas)">🔥 Quema Grasa (4 Semanas)</option>
                             <option value="Glúteo">Enfoque Glúteo 🍑</option>
                             <option value="Pierna">Pierna Completa 🦵</option>
                             <option value="Espalda">Espalda & Estética 🦋</option>
@@ -98,13 +99,43 @@
 
             <!-- Stats View -->
             <div id="view-stats" class="view-section hidden">
-                <section class="card">
-                    <h2>📊 Estadísticas</h2>
-                    <div id="stats-summary" style="margin-bottom: 20px;">
-                        <div class="stat-pill">Carga Total Semanal: <span id="weekly-volume">0</span> kg</div>
+                <section class="card" style="margin-bottom: 15px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h2 style="margin: 0;">⚖️ Control de Peso</h2>
+                        <select id="weight-unit-select" onchange="changeWeightUnit()"
+                            style="padding: 5px 10px; border-radius: 8px; font-size: 0.8rem; background: #eee; border: 1px solid #ccc;">
+                            <option value="kg">KG</option>
+                            <option value="lb">LB</option>
+                        </select>
                     </div>
-                    <div id="stats-charts">
-                        <p style="text-align:center; color: #999;">Gráficos de progreso próximamente...</p>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label style="font-size: 0.75rem; color: #666;">Peso Inicial (<span
+                                    class="unit-label">kg</span>)</label>
+                            <input type="number" id="weight-initial" placeholder="0" onchange="saveWeight()"
+                                style="width: 100%; padding: 8px; font-size: 1rem; text-align: center; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="font-size: 0.75rem; color: #666;">Peso Actual (<span
+                                    class="unit-label">kg</span>)</label>
+                            <input type="number" id="weight-current" placeholder="0" onchange="saveWeight()"
+                                style="width: 100%; padding: 8px; font-size: 1rem; text-align: center; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px;">
+                        </div>
+                    </div>
+                    <div id="weight-progress-box"
+                        style="background: rgba(var(--primary-rgb), 0.1); padding: 15px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">Progreso Total:</div>
+                        <div id="weight-diff" style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">0.0
+                            <span class="unit-label">kg</span></div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>📊 Volumen de Entrenamiento</h2>
+                    <div id="stats-summary" style="margin-bottom: 20px;">
+                        <div class="stat-pill">Carga Total Semanal: <span id="weekly-volume">0</span> <span
+                                class="unit-label">kg</span></div>
                     </div>
                 </section>
             </div>
