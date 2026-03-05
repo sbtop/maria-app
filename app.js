@@ -66,7 +66,8 @@ const Icons = {
     "alert-triangle": `<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6zm-1 8h2v2h-2v-2zm0-6h2v4h-2v-4z" fill="#EF4444"/></svg>`,
     bot: `<svg viewBox="0 0 24 24" width="28" height="28"><rect x="4" y="8" width="16" height="12" rx="4" fill="#F472B6"/><circle cx="8" cy="13" r="1.5" fill="#FFF"/><circle cx="16" cy="13" r="1.5" fill="#FFF"/><path d="M10 17h4" stroke="#FFF" stroke-width="2" stroke-linecap="round"/><path d="M12 8V4" stroke="#BE123C" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="3" r="2" fill="#E11D48"/></svg>`,
     eye: `<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5c-1.7-4.4-6-7.5-11-7.5zM12 17c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z" fill="#3B82F6"/></svg>`,
-    camera: `<svg viewBox="0 0 24 24" width="14" height="14"><rect x="3" y="6" width="18" height="14" rx="2" fill="#8B5CF6"/><circle cx="12" cy="13" r="4" fill="#FBCFE8"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2" fill="#6D28D9"/></svg>`
+    camera: `<svg viewBox="0 0 24 24" width="14" height="14"><rect x="3" y="6" width="18" height="14" rx="2" fill="#8B5CF6"/><circle cx="12" cy="13" r="4" fill="#FBCFE8"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2" fill="#6D28D9"/></svg>`,
+    "rotate-cw": `<svg viewBox="0 0 24 24" width="16" height="16"><path d="M21 2v6h-6M21 8A9 9 0 1112 3v0" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
 };
 
 function replaceIcons() {
@@ -425,6 +426,18 @@ window.toggleExercise = (day, exName) => {
     completedExercises[day][exName] = !completedExercises[day][exName];
     localStorage.setItem('maria-completed', JSON.stringify(completedExercises));
     renderWorkout(currentDayIndex);
+};
+
+window.resetWeek = () => {
+    if (confirm("¿Empezar una nueva semana? Esto borrará el progreso de los ejercicios diarios, pero mantendrá tus suplementos y control de peso seguros.")) {
+        completedExercises = {};
+        exerciseLogs = {};
+        localStorage.removeItem('maria-completed');
+        localStorage.removeItem('maria-logs');
+        renderWorkout(currentDayIndex);
+        updateStats();
+        alert("¡Semana reiniciada! A darle con todo 💪✨");
+    }
 };
 
 function updateProgress(day) {
