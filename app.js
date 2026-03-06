@@ -67,7 +67,8 @@ const Icons = {
     bot: `<svg viewBox="0 0 24 24" width="28" height="28"><rect x="4" y="8" width="16" height="12" rx="4" fill="#F472B6"/><circle cx="8" cy="13" r="1.5" fill="#FFF"/><circle cx="16" cy="13" r="1.5" fill="#FFF"/><path d="M10 17h4" stroke="#FFF" stroke-width="2" stroke-linecap="round"/><path d="M12 8V4" stroke="#BE123C" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="3" r="2" fill="#E11D48"/></svg>`,
     eye: `<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5c-1.7-4.4-6-7.5-11-7.5zM12 17c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z" fill="#3B82F6"/></svg>`,
     camera: `<svg viewBox="0 0 24 24" width="14" height="14"><rect x="3" y="6" width="18" height="14" rx="2" fill="#8B5CF6"/><circle cx="12" cy="13" r="4" fill="#FBCFE8"/><path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2" fill="#6D28D9"/></svg>`,
-    "rotate-cw": `<svg viewBox="0 0 24 24" width="16" height="16"><path d="M21 2v6h-6M21 8A9 9 0 1112 3v0" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+    "rotate-cw": `<svg viewBox="0 0 24 24" width="16" height="16"><path d="M21 2v6h-6M21 8A9 9 0 1112 3v0" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    calendar: `<svg viewBox="0 0 24 24" width="22" height="22"><rect x="3" y="4" width="18" height="18" rx="3" fill="#8B5CF6"/><path d="M16 2v4M8 2v4" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round"/><path d="M3 10h18" stroke="#6D28D9" stroke-width="2.5"/><rect x="7" y="14" width="4" height="4" rx="1" fill="#FDE047"/><rect x="13" y="14" width="4" height="4" rx="1" fill="#FBCFE8"/></svg>`
 };
 
 function replaceIcons() {
@@ -149,6 +150,13 @@ let weightTracker = { initial: '', current: '' };
 let currentWeightUnit = 'kg';
 let currentDayIndex = 0;
 let lastCheckTime = null;
+let trainingDates = [];
+let currentCalendarDate = new Date();
+
+function getLocalDateStr(dateObj) {
+    const tzoffset = dateObj.getTimezoneOffset() * 60000;
+    return (new Date(dateObj.getTime() - tzoffset)).toISOString().split('T')[0];
+}
 
 function loadState() {
     try {
@@ -166,6 +174,9 @@ function loadState() {
 
         const u = localStorage.getItem('maria-weight-unit');
         if (u) currentWeightUnit = u;
+
+        const td = localStorage.getItem('maria-training-dates');
+        if (td) trainingDates = JSON.parse(td);
 
         lastCheckTime = localStorage.getItem('maria-last-check');
     } catch (e) {
@@ -223,6 +234,7 @@ function init() {
     renderWorkout(0);
     renderLibrary();
     updateStats();
+    renderCalendar();
     checkNotificationPermission();
     setupInterval();
     checkMissedAlarms();
@@ -242,7 +254,10 @@ function setupNav() {
             if (target) target.classList.remove('hidden');
 
             viewTitle.innerText = item.querySelector('span').innerText;
-            if (view === 'stats') updateStats();
+            if (view === 'stats') {
+                updateStats();
+                renderCalendar();
+            }
             if (view === 'library') renderLibrary();
         };
     });
@@ -423,10 +438,82 @@ window.saveLog = (day, exName, idx) => {
 };
 
 window.toggleExercise = (day, exName) => {
-    completedExercises[day][exName] = !completedExercises[day][exName];
+    const isNowChecked = !completedExercises[day][exName];
+    completedExercises[day][exName] = isNowChecked;
     localStorage.setItem('maria-completed', JSON.stringify(completedExercises));
     renderWorkout(currentDayIndex);
+
+    if (isNowChecked) {
+        const todayStr = getLocalDateStr(new Date());
+        if (!trainingDates.includes(todayStr)) {
+            trainingDates.push(todayStr);
+            localStorage.setItem('maria-training-dates', JSON.stringify(trainingDates));
+            if (!document.getElementById('view-stats').classList.contains('hidden')) {
+                renderCalendar();
+            }
+        }
+    }
 };
+
+window.changeMonth = (delta) => {
+    currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+    renderCalendar();
+};
+
+function renderCalendar() {
+    const grid = document.getElementById('calendar-grid');
+    if (!grid) return;
+
+    const year = currentCalendarDate.getFullYear();
+    const month = currentCalendarDate.getMonth();
+
+    const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
+
+    // Day 0 is Sunday, adjusting to start Monday
+    const firstDay = new Date(year, month, 1).getDay();
+    let startDay = firstDay === 0 ? 6 : firstDay - 1;
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let html = '';
+
+    // Empty prefix cells
+    for (let i = 0; i < startDay; i++) {
+        html += `<div></div>`;
+    }
+
+    const todayStr = getLocalDateStr(new Date());
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dDate = new Date(year, month, d);
+        const dStr = getLocalDateStr(dDate);
+
+        const isTrained = trainingDates.includes(dStr);
+        const isToday = dStr === todayStr;
+
+        let bg = 'transparent';
+        let color = '#333';
+        let fw = 'normal';
+        let border = 'none';
+        let shadow = 'none';
+
+        if (isTrained) {
+            bg = 'var(--primary)';
+            color = 'white';
+            fw = 'bold';
+            shadow = '0 2px 4px rgba(255,107,129,0.3)';
+        } else if (isToday) {
+            border = '2px solid var(--primary)';
+            color = 'var(--primary)';
+            fw = 'bold';
+        }
+
+        html += `<div style="padding: 6px 0; border-radius: 8px; background: ${bg}; color: ${color}; font-weight: ${fw}; border: ${border}; box-shadow: ${shadow}; font-size: 0.85rem; display: flex; align-items: center; justify-content: center;">${d}</div>`;
+    }
+
+    grid.innerHTML = html;
+}
 
 window.resetWeek = () => {
     if (confirm("¿Empezar una nueva semana? Esto borrará el progreso de los ejercicios diarios, pero mantendrá tus suplementos y control de peso seguros.")) {

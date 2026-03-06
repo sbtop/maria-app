@@ -144,6 +144,34 @@
                         </div>
                     </div>
                 </section>
+                <section class="card" style="margin-bottom: 15px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h2 style="margin: 0; display: flex; align-items: center; gap: 8px;"><i
+                                data-icon="calendar"></i> Actividad</h2>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <button onclick="changeMonth(-1)"
+                                style="padding: 4px 10px; font-size: 0.9rem; background: #eee; border:none; border-radius:4px; cursor: pointer;">◀</button>
+                            <span id="calendar-month-year"
+                                style="font-weight: bold; font-size: 0.9rem; min-width: 90px; text-align: center;"></span>
+                            <button onclick="changeMonth(1)"
+                                style="padding: 4px 10px; font-size: 0.9rem; background: #eee; border:none; border-radius:4px; cursor: pointer;">▶</button>
+                        </div>
+                    </div>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-bottom: 10px;">
+                        <div style="font-size: 0.75rem; color: #888; font-weight: bold;">L</div>
+                        <div style="font-size: 0.75rem; color: #888; font-weight: bold;">M</div>
+                        <div style="font-size: 0.75rem; color: #888; font-weight: bold;">X</div>
+                        <div style="font-size: 0.75rem; color: #888; font-weight: bold;">J</div>
+                        <div style="font-size: 0.75rem; color: #888; font-weight: bold;">V</div>
+                        <div style="font-size: 0.75rem; color: #888; font-weight: bold;">S</div>
+                        <div style="font-size: 0.75rem; color: #888; font-weight: bold;">D</div>
+                    </div>
+                    <div id="calendar-grid"
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center;">
+                    </div>
+                </section>
 
                 <section class="card">
                     <h2 style="display: flex; align-items: center; gap: 8px;"><i data-icon="bar-chart-2"></i> Volumen
