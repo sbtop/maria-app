@@ -1,0 +1,27 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with Gradient -->
+  <rect width="512" height="512" rx="120" fill="url(#paint0_linear)"/>
+  
+  <!-- Glossy Overlay / Glassmorphism effect -->
+  <rect x="25" y="25" width="462" height="462" rx="100" fill="url(#paint1_radial)" fill-opacity="0.3"/>
+  <rect x="40" y="40" width="432" height="432" rx="85" stroke="white" stroke-opacity="0.2" stroke-width="2"/>
+
+  <!-- Minimalist Figure (Line Art) -->
+  <g transform="translate(100, 100) scale(0.6)">
+    <path d="M420.5 440C420.5 440 380 445 350 445C320 445 280 440 280 440L230 350L130 430C130 430 100 445 80 440C60 435 70 410 85 410L180 300C180 300 210 210 220 180C230 150 260 80 300 60C340 40 370 80 350 120C330 160 300 220 300 220L340 280L430 350C430 350 460 380 450 410C440 440 420.5 440 420.5 440Z" stroke="#333" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="330" cy="50" r="30" stroke="#333" stroke-width="12"/>
+    <path d="M280 150C280 150 320 160 340 160" stroke="#333" stroke-width="12" stroke-linecap="round"/>
+  </g>
+
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="paint0_linear" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFB5C2"/>
+      <stop offset="1" stop-color="#FFD6A5"/>
+    </linearGradient>
+    <radialGradient id="paint1_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" transform="translate(256 128) rotate(90) scale(384)">
+      <stop stop-color="white" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
