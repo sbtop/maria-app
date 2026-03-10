@@ -7,7 +7,7 @@ window.onerror = function (msg, url, line) {
     return false;
 };
 
-console.log("Maria App v5 Loading...");
+console.log("Family Esencial v5 Loading...");
 
 const exerciseImages = {
     "Prensa de piernas": "images/real_prensa_piernas_diagram.png",
@@ -19,13 +19,13 @@ const exerciseImages = {
     "Abductores": "images/abductores.webp",
     "Remo sentado": "images/remo_sentado.jpg",
     "Bíceps en máquina": "images/biceps_maquina.png",
-    "Tríceps en polea": "",
-    "Deltoide posterior": "",
-    "Press de pecho": "",
-    "Press de hombros": "",
-    "Elevaciones laterales": "",
-    "Patada de glúteo": "",
-    "Prensa pies altos": ""
+    "Tríceps en polea": "images/real_triceps_polea_diagram.png",
+    "Deltoide posterior": "images/real_deltoide_posterior_diagram.png",
+    "Press de pecho": "images/real_press_pecho_diagram.png",
+    "Press de hombros": "images/real_press_hombros_diagram.png",
+    "Elevaciones laterales": "images/real_elevaciones_laterales_diagram.png",
+    "Patada de glúteo": "images/real_patada_gluteo_diagram.png",
+    "Prensa pies altos": "images/real_prensa_pies_altos_diagram.png"
 };
 
 const modalDescriptions = {
@@ -686,7 +686,7 @@ sendChat.onclick = () => {
             }
         }
 
-        addChatMessage('Coach', response, 'var(--coach-bg)');
+        addChatMessage('Coach Family', response, 'var(--coach-bg)');
     }, 600);
 };
 
