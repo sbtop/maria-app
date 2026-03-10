@@ -68,8 +68,8 @@ const exerciseDatabase = [
         muscle: "Cuádriceps/Glúteo",
         equip: "Mancuerna",
         category: "Pierna",
-        tags: ["funcional"],
-        instructions: "1. Sujeta una mancuerna verticalmente frente al pecho.\n2. Mantén los codos hacia adentro y baja la cadera.\n3. Mantén la espalda recta y el peso en los talones."
+        tags: ["funcional", "básico"],
+        instructions: "1. Sujeta una mancuerna verticalmente frente al pecho con ambas manos.\n2. Separa los pies a la anchura de los hombros con las puntas hacia afuera.\n3. Baja la cadera manteniendo la espalda recta y los codos por dentro de las rodillas.\n4. Empuja con los talones para volver a la posición inicial."
     },
     {
         id: "zancadas_mancuerna",
@@ -77,8 +77,8 @@ const exerciseDatabase = [
         muscle: "Piernas completo",
         equip: "Mancuerna",
         category: "Pierna",
-        tags: ["equilibrio"],
-        instructions: "1. Sujeta una mancuerna en cada mano a los costados.\n2. Da un paso largo al frente bajando la rodilla trasera.\n3. Mantén el torso erguido y no dejes que la rodilla delantera pase la punta del pie."
+        tags: ["equilibrio", "estabilidad"],
+        instructions: "1. Sujeta una mancuerna en cada mano a los costados con los brazos extendidos.\n2. Da un paso largo al frente manteniendo el torso erguido.\n3. Baja la rodilla trasera hasta que casi toque el suelo (90 grados).\n4. Impúlsate hacia atrás para regresar a la posición de inicio."
     },
     {
         id: "peso_muerto_rumano_mancuerna",
@@ -86,26 +86,116 @@ const exerciseDatabase = [
         muscle: "Isquiotibiales/Glúteo",
         equip: "Mancuerna",
         category: "Pierna",
-        tags: ["fuerza"],
-        instructions: "1. Sujeta las mancuernas frente a tus muslos.\n2. Baja el torso llevando la cadera hacia atrás con las rodillas ligeramente flexionadas.\n3. Baja hasta sentir el estiramiento en los isquios y sube apretando el glúteo."
+        tags: ["fuerza", "cadena posterior"],
+        instructions: "1. Sujeta las mancuernas frente a tus muslos con las palmas mirando hacia ti.\n2. Lleva la cadera hacia atrás manteniendo la espalda completamente plana.\n3. Baja las pesas pegadas a tus piernas hasta pasar las rodillas.\n4. Siente el estiramiento en los isquiotibiales y sube apretando el glúteo."
     },
     {
-        id: "press_militar_mancuerna",
-        name: "Press Militar (Mancuerna)",
-        muscle: "Hombros",
+        id: "bulgarian_split_squat",
+        name: "Sentadilla Búlgara",
+        muscle: "Glúteo/Cuádriceps",
         equip: "Mancuerna",
-        category: "Hombro",
-        tags: ["fuerza"],
-        instructions: "1. Siéntate o quédate de pie con las mancuernas a la altura de las orejas.\n2. Empuja verticalmente hasta estirar los brazos.\n3. Baja lentamente controlando el peso."
+        category: "Pierna",
+        tags: ["unilateral", "premium"],
+        instructions: "1. Apoya un pie atrás en un banco o silla y el otro al frente.\n2. Sujeta las mancuernas a los costados.\n3. Baja la cadera verticalmente hasta que la rodilla delantera forme 90 grados.\n4. Mantén el peso en el talón delantero y sube con control."
+    },
+    {
+        id: "press_pecho_mancuerna",
+        name: "Press de Pecho (Mancuernas)",
+        muscle: "Pectoral/Tríceps",
+        equip: "Mancuerna",
+        category: "Pecho",
+        tags: ["empuje", "fuerza"],
+        instructions: "1. Túmbate en un banco con una mancuerna en cada mano sobre el pecho.\n2. Baja las pesas hacia los lados del pecho controladamente.\n3. Empuja hacia arriba extendiendo los brazos sin chocar las mancuernas.\n4. Mantén los pies apoyados y la espalda estable."
+    },
+    {
+        id: "aperturas_pecho_mancuerna",
+        name: "Aperturas de Pecho (Mancuerna)",
+        muscle: "Pectoral Mayor",
+        equip: "Mancuerna",
+        category: "Pecho",
+        tags: ["aislamiento", "estiramiento"],
+        instructions: "1. Túmbate en un banco con las pesas juntas sobre tu cara.\n2. Abre los brazos en forma de arco manteniendo una ligera flexión de codo.\n3. Baja hasta sentir el estiramiento en el pectoral.\n4. Cierra los brazos usando el pecho para volver al inicio."
     },
     {
         id: "remo_mancuerna_un_brazo",
-        name: "Remo a un brazo (Mancuerna)",
-        muscle: "Espalda",
+        name: "Remo a un brazo",
+        muscle: "Espalda/Dorsal",
         equip: "Mancuerna",
         category: "Espalda",
-        tags: ["densidad"],
-        instructions: "1. Apoya una mano y rodilla en un banco.\n2. Sujeta la mancuerna con el brazo libre.\n3. Tira de la mancuerna hacia tu cadera, llevando el codo bien atrás."
+        tags: ["densidad", "fuerza"],
+        instructions: "1. Apoya una mano y la rodilla del mismo lado en un banco.\n2. Con el otro brazo, tira de la mancuerna hacia tu cadera.\n3. Mantén el codo pegado al cuerpo y aprieta la espalda al final.\n4. Baja el peso lentamente extendiendo el brazo por completo."
+    },
+    {
+        id: "renegade_row",
+        name: "Remo Renegado",
+        muscle: "Espalda/Core",
+        equip: "Mancuerna",
+        category: "Espalda",
+        tags: ["funcional", "core"],
+        instructions: "1. Colócate en posición de plancha alta apoyado sobre las mancuernas.\n2. Realiza un remo con un brazo llevando la pesa a la cadera.\n3. Mantén la cadera paralela al suelo sin rotar el cuerpo.\n4. Alterna brazos manteniendo el abdomen muy firme."
+    },
+    {
+        id: "press_militar_mancuerna",
+        name: "Press Militar (Hombros)",
+        muscle: "Hombros",
+        equip: "Mancuerna",
+        category: "Hombro",
+        tags: ["empuje", "fuerza"],
+        instructions: "1. Siéntate o de pie con las mancuernas a la altura de las orejas.\n2. Empuja verticalmente hasta que los brazos estén casi rectos.\n3. Baja lentamente controlando el peso hasta la posición inicial.\n4. Evita arquear la espalda baja durante el movimiento."
+    },
+    {
+        id: "elevaciones_laterales",
+        name: "Elevaciones Laterales",
+        muscle: "Deltoide Lateral",
+        equip: "Mancuerna",
+        category: "Hombro",
+        tags: ["aislamiento", "estética"],
+        instructions: "1. Sujeta las mancuernas frente a tus muslos.\n2. Eleva los brazos hacia los lados hasta la altura de los hombros.\n3. Mantén una ligera flexión en los codos y el torso quieto.\n4. Baja el peso controlando la resistencia en todo momento."
+    },
+    {
+        id: "elevaciones_frontales",
+        name: "Elevaciones Frontales",
+        muscle: "Deltoide Anterior",
+        equip: "Mancuerna",
+        category: "Hombro",
+        tags: ["aislamiento"],
+        instructions: "1. De pie, sujeta las mancuernas frente a tus muslos.\n2. Eleva una pesa al frente hasta la altura de los ojos.\n3. Baja con control y repite con el otro brazo.\n4. No uses el balanceo del cuerpo para subir el peso."
+    },
+    {
+        id: "curls_biceps_mancuerna",
+        name: "Curl de Bíceps",
+        muscle: "Bíceps",
+        equip: "Mancuerna",
+        category: "Brazo",
+        tags: ["aislamiento", "brazos"],
+        instructions: "1. Sujeta las pesas con las palmas mirando al frente.\n2. Flexiona los codos llevando las pesas hacia los hombros.\n3. Aprieta el bíceps un segundo en la parte superior.\n4. Baja lentamente hasta estirar los brazos por completo."
+    },
+    {
+        id: "hammer_curls",
+        name: "Curl Martillo",
+        muscle: "Bíceps/Braquial",
+        equip: "Mancuerna",
+        category: "Brazo",
+        tags: ["aislamiento", "agarre"],
+        instructions: "1. Sujeta las mancuernas con las palmas enfrentadas (agarre neutro).\n2. Flexiona los brazos manteniendo los codos pegados al torso.\n3. Sube las pesas hacia los hombros sin girar las muñecas.\n4. Baja con control manteniendo la tensión."
+    },
+    {
+        id: "copa_triceps_mancuerna",
+        name: "Extensión tras nuca (Copa)",
+        muscle: "Tríceps",
+        equip: "Mancuerna",
+        category: "Brazo",
+        tags: ["aislamiento", "estiramiento"],
+        instructions: "1. Sujeta una mancuerna con ambas manos por encima de la cabeza.\n2. Baja la pesa por detrás de tu nuca flexionando los codos.\n3. Mantén los codos cerrados y apuntando hacia el techo.\n4. Extiende los brazos totalmente hacia arriba."
+    },
+    {
+        id: "patada_triceps",
+        name: "Patada de Tríceps",
+        muscle: "Tríceps",
+        equip: "Mancuerna",
+        category: "Brazo",
+        tags: ["aislamiento"],
+        instructions: "1. Inclina el torso hacia adelante con la espalda recta.\n2. Mantén el codo pegado al costado y el brazo paralelo al suelo.\n3. Extiende el brazo hacia atrás bloqueando el tríceps.\n4. Regresa a la posición inicial sin mover el hombro."
     },
 
     // Espalda & Pecho
